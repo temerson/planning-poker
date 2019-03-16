@@ -5,7 +5,7 @@ const mockgoose = new Mockgoose(mongoose);
 
 export async function connectDB() {
   await mockgoose.prepareStorage();
-  await mongoose.connect('mongodb://localhost:27017/mern-test')
+  await mongoose.connect('mongodb+srv://temerson:temerson@cluster0-26fiw.mongodb.net/test?retryWrites=true')
     .catch(() => 'Unable to connect to test database');
 }
 

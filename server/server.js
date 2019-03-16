@@ -45,8 +45,7 @@ import Helmet from 'react-helmet';
 // Import required modules
 import routes from '../client/routes';
 import { fetchComponentData } from './util/fetchData';
-import posts from './routes/post.routes';
-import dummyData from './dummyData';
+import boards from './routes/board.routes';
 import serverConfig from './config';
 
 // Set native promises as mongoose promise
@@ -59,9 +58,6 @@ if (process.env.NODE_ENV !== 'test') {
       console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
       throw error;
     }
-
-    // feed some dummy data in DB.
-    dummyData();
   });
 }
 
@@ -70,7 +66,7 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
-app.use('/api', posts);
+app.use('/api', boards);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
