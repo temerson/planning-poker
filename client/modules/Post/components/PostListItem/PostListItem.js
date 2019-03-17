@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { FormattedMessage } from 'react-intl';
 
 // Import Style
 import styles from './PostListItem.css';
@@ -14,9 +13,9 @@ function PostListItem(props) {
           {props.post.title}
         </Link>
       </h3>
-      <p className={styles['author-name']}><FormattedMessage id="by" /> {props.post.name}</p>
+      <p className={styles['author-name']}><span id="by" /> {props.post.name}</p>
       <p className={styles['post-desc']}>{props.post.content}</p>
-      <p className={styles['post-action']}><a href="#" onClick={props.onDelete}><FormattedMessage id="deletePost" /></a></p>
+      <p className={styles['post-action']}><a href="#" onClick={props.onDelete}><span id="deletePost" /></a></p>
       <hr className={styles.divider} />
     </div>
   );

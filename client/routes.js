@@ -16,8 +16,10 @@ if (typeof require.ensure !== 'function') {
  */
 if (process.env.NODE_ENV !== 'production') {
   // Require async routes only in development for react-hot-reloader to work.
-  require('./modules/Post/pages/PostListPage/PostListPage');
-  require('./modules/Post/pages/PostDetailPage/PostDetailPage');
+  require('./modules/Board/pages/WhatDo');
+  require('./modules/Board/pages/RegisterBoard');
+  require('./modules/Board/pages/BoardList');
+  require('./modules/Board/pages/Board');
 }
 
 // react-router setup with code-splitting
@@ -27,15 +29,31 @@ export default (
     <IndexRoute
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./modules/Post/pages/PostListPage/PostListPage').default);
+          cb(null, require('./modules/Board/pages/WhatDo').default);
         });
       }}
     />
     <Route
-      path="/posts/:slug-:cuid"
+      path="/new-board"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./modules/Post/pages/PostDetailPage/PostDetailPage').default);
+          cb(null, require('./modules/Board/pages/RegisterBoard').default);
+        });
+      }}
+    />
+    <Route
+      path="/boards"
+      getComponent={(nextState, cb) => {
+        require.ensure([], require => {
+          cb(null, require('./modules/Board/pages/BoardList').default);
+        });
+      }}
+    />
+    <Route
+      path="/boards/:slug"
+      getComponent={(nextState, cb) => {
+        require.ensure([], require => {
+          cb(null, require('./modules/Board/pages/Board').default);
         });
       }}
     />

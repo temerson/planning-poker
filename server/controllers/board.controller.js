@@ -31,7 +31,7 @@ export function addBoard(req, res) {
 }
 
 export function getBoard(req, res) {
-  Board.findOne({ _id: req.params.boardId }).exec((err, board) => {
+  Board.findOne({ slug: req.params.boardSlug }).exec((err, board) => {
     if (err) {
       res.status(500).send(err);
     }
