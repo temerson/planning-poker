@@ -26,7 +26,7 @@ export function addBoard(req, res) {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ board: saved });
+    res.json(saved);
   });
 }
 
@@ -35,7 +35,7 @@ export function getBoard(req, res) {
     if (err) {
       res.status(500).send(err);
     }
-    res.json({ board });
+    res.json(board);
   });
 }
 
@@ -77,7 +77,7 @@ export function addUserToBoard(req, res) {
       if (saveErr) {
         res.status(500).send(saveErr);
       }
-      res.json({ board: saved });
+      res.json(saved);
     });
   });
 }
@@ -95,7 +95,7 @@ export function removeUserFromBoard(req, res) {
       if (saveErr) {
         res.status(500).send(saveErr);
       }
-      res.json({ board: saved });
+      res.json(saved);
     });
   });
 }

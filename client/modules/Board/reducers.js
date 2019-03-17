@@ -9,6 +9,6 @@ const boardReducer = (state = [], action) => {
   }
 };
 
-export const getBoard = (state, slug) => state.find(board => board.slug === slug);
+export const getBoard = (state, slug) => state.boards.find(board => board.slug === slug);
 
 export default boardReducer;
