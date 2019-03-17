@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router';
-import { getUsername } from '../../reducers';
-import backgroundImage from '../../header-bk.png';
+import { getUsername } from '../reducers';
+import backgroundImage from '../header-bk.png';
 
 const Wrapper = styled.div`
   background: #eee url(${backgroundImage}) center;
@@ -16,7 +16,7 @@ const Content = styled.div`
   width: 100%;
   max-width: 980px;
   margin: auto;
-  padding: 64px 16px;
+  padding: 16px;
   overflow: auto;
 `;
 const Title = styled.h1`

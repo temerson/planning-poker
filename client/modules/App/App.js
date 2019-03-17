@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 // Import Components
 import Helmet from 'react-helmet';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 let DevTools;
 if (process.env.NODE_ENV === 'development') {
