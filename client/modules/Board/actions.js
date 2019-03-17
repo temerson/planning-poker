@@ -1,6 +1,7 @@
 import callApi from '../../util/apiCaller';
 
 export const ADD_BOARD = 'ADD_BOARD';
+export const ADD_BOARDS = 'ADD_BOARDS';
 
 export function addBoard(board) {
   return {
@@ -8,6 +9,14 @@ export function addBoard(board) {
     board,
   };
 }
+
+export function addBoards(boards) {
+  return {
+    type: ADD_BOARDS,
+    boards,
+  };
+}
+
 
 export function addBoardRequest(title, username, router) {
   return () => {
@@ -17,6 +26,13 @@ export function addBoardRequest(title, username, router) {
         owner: { username },
       },
     }).then(res => res.board && router.push(`/boards/${res.board.slug}`));
+  };
+}
+
+export function getBoardsRequest() {
+  return (dispatch) => {
+    return callApi('boards', 'get')
+      .then(res => dispatch(addBoards(res.boards)));
   };
 }
 
