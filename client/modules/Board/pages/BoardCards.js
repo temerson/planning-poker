@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   position: relative;
   padding-top: 1rem;
   height: 10rem;
+  margin: 0 auto;
 `;
 
 class BoardCards extends React.Component {

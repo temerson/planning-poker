@@ -14,14 +14,14 @@ const Card = styled.div`
   cursor: pointer;
   transform: rotate(${props => props.rotate}deg);
   position: absolute;
-  left: calc(${props => props.index} * 4rem);
+  left: calc(${props => props.offset} * 4rem);
 
   @media only screen and (max-width: 850px) {
-    left: calc(${props => props.index} * 3rem);
+    left: calc(${props => props.offset} * 3rem);
   }
 
   @media only screen and (max-width: 650px) {
-    left: calc(${props => props.index} * 2rem);
+    left: calc(${props => props.offset} * 2rem);
   }
 
   &:hover {
@@ -59,23 +59,24 @@ const PokerCard = ({ high, index, numCards, onClick, value }) => {
   const half = numCards / 2;
   const step = 1.5;
   const rotate = (half * -1) + (index * step) - step;
+  const offset = (half * -1) + index;
 
   if (value === '?') {
     return (
-      <UnknownCard index={index} rotate={rotate} onClick={() => onClick(value)}>
+      <UnknownCard offset={offset} rotate={rotate} onClick={() => onClick(value)}>
         <BlackCardValue>{value}</BlackCardValue>
       </UnknownCard>
     );
   } else if (high) {
     return (
-      <HighCard index={index} rotate={rotate} onClick={() => onClick(value)}>
+      <HighCard offset={offset} rotate={rotate} onClick={() => onClick(value)}>
         <WhiteCardValue>{value}</WhiteCardValue>
       </HighCard>
     );
   }
 
   return ( // TODO: linter doesn't allow else-if after return...that's annoying
-    <Card index={index} rotate={rotate} onClick={() => onClick(value)}>
+    <Card offset={offset} rotate={rotate} onClick={() => onClick(value)}>
       <WhiteCardValue>{value}</WhiteCardValue>
     </Card>
   );

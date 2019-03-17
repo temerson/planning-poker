@@ -50,7 +50,7 @@ class RegisterBoard extends React.Component {
 
         {error && <Error>{error}</Error>}
 
-        <Button onClick={e => this.handleButtonClick(e)}>Okay</Button>
+        <Button onClick={e => this.handleButtonClick(e)}>I'm so ready</Button>
       </Wrapper>
     );
   }

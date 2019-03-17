@@ -25,7 +25,7 @@ export function addBoardRequest(title, username, router) {
         title,
         owner: { username },
       },
-    }).then(res => res.board && router.push(`/boards/${res.board.slug}`));
+    }).then(res => router.push(`/boards/${res.slug}`));
   };
 }
 

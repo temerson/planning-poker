@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-// Import Style
-import styles from './App.css';
+import styled from 'styled-components';
 
 // Import Components
 import Helmet from 'react-helmet';
@@ -14,6 +12,18 @@ if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line global-require
   DevTools = require('./components/DevTools').default;
 }
+
+const FlexContainer = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
+const FullHeight = styled.div`
+  overflow: auto;
+  flex-grow: 1;
+  width: 100%;
+  margin: 0 auto;
+`;
 
 export class App extends Component {
   constructor(props) {
@@ -29,7 +39,7 @@ export class App extends Component {
     return (
       <div>
         {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
-        <div>
+        <FlexContainer>
           <Helmet
             title="Planning Poker"
             titleTemplate="%s - Poker Board"
@@ -46,11 +56,11 @@ export class App extends Component {
             ]}
           />
           <Header />
-          <div className={styles.container}>
+          <FullHeight>
             {this.props.children}
-          </div>
+          </FullHeight>
           <Footer />
-        </div>
+        </FlexContainer>
       </div>
     );
   }

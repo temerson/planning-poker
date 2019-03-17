@@ -15,7 +15,8 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-areas: "actions actions actions actions"
     "members status task history"
-    "cards cards cards cards"
+    "cards cards cards cards";
+  height: 100%;
 `;
 
 class Board extends React.Component {
@@ -37,10 +38,10 @@ class Board extends React.Component {
     return (
       <Wrapper>
         <BoardActions style="grid-area: actions" />
-        <BoardMembers members={board.users} />
-        <BoardStatus />
-        <BoardTask />
-        <BoardHistory />
+        <BoardMembers style="grid-area: members" members={board.users} />
+        <BoardStatus style="grid-area: status" />
+        <BoardTask style="grid-area: task" />
+        <BoardHistory style="grid-area: history" />
         <BoardCards style="grid-area: cards" />
       </Wrapper>
     );
