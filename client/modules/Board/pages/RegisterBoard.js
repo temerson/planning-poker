@@ -3,28 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { Error, Title, Wrapper } from '../../../components';
+import { Button, Error, Input, Title, Wrapper } from '../../../components';
 import { addBoardRequest } from '../actions';
 
-const Input = styled.input`
-  display: block;
-  margin: 1rem auto;
-  padding: .5rem;
-
-  font-weight: 400;
-  font-size: 1.2rem;
-  color: #3c3c3c;
-
-  border: none;
-`;
-
-const Button = styled.button`
-  padding: .5rem;
-  margin: 1rem;
-
-  font-size: 1rem;
-  font-weight: 400;
-`;
 
 class RegisterBoard extends React.Component {
   static propTypes = {
