@@ -6,6 +6,7 @@ const BoardActions = () => (
     <Button>Reveal</Button>
     <Button>Reset Votes</Button>
     <Button>Next Task</Button>
+    <Button>Delete Board</Button>
   </div>
 );
 

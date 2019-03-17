@@ -4,53 +4,81 @@ import styled from 'styled-components';
 
 const Card = styled.div`
   background-color: #0085da;
+  border: 2px solid #02488f;
   box-shadow: 2px 2px 2px #3c3c3c;
-  width: 4rem;
-  height: 5rem;
-
-  text-align: center;
+  width: 6rem;
+  height: 8rem;
 
   margin: 0.1rem;
   border-radius: 3px;
+  cursor: pointer;
+  transform: rotate(${props => props.rotate}deg);
+  position: absolute;
+  left: calc(${props => props.index} * 4rem);
+
+  @media only screen and (max-width: 850px) {
+    left: calc(${props => props.index} * 3rem);
+  }
+
+  @media only screen and (max-width: 650px) {
+    left: calc(${props => props.index} * 2rem);
+  }
 
   &:hover {
     box-shadow: 4px 4px 4px #3c3c3c;
-    position: relative;
-    transform: translate(0, -5px);
+    transform: translate(0, -1rem);
     transition: ease 0.2s;
   }
 `;
 const HighCard = styled(Card)`
   background-color: #da4c00;
+  border: 2px solid #8f3802;
 `;
-const StringCard = styled(Card)`
+const UnknownCard = styled(Card)`
   background-color: #dab900;
+  border: 2px solid #8f7f02;
 `;
 
 const WhiteCardValue = styled.h1`
+  padding-left: 0.2rem;
   color: white;
-  transform: translate(0, 50%);
 `;
 const BlackCardValue = styled(WhiteCardValue)`
   color: black;
 `;
 
-class PokerCard extends React.Component {
-  static propTypes = {
-    high: PropTypes.bool.isRequired,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  };
+const PokerCard = ({ high, index, numCards, onClick, value }) => {
+  const half = numCards / 2;
+  const step = 1.5;
+  const rotate = (half * -1) + (index * step) - step;
 
-  render() {
-    const { high, value } = this.props;
-    if (typeof value === 'string') {
-      return <StringCard><BlackCardValue>{value}</BlackCardValue></StringCard>;
-    } else if (high) {
-      return <HighCard><WhiteCardValue>{value}</WhiteCardValue></HighCard>;
-    } else {
-      return <Card><WhiteCardValue>{value}</WhiteCardValue></Card>;
-    }
+  if (value === '?') {
+    return (
+      <UnknownCard index={index} rotate={rotate} onClick={() => onClick(value)}>
+        <BlackCardValue>{value}</BlackCardValue>
+      </UnknownCard>
+    );
+  } else if (high) {
+    return (
+      <HighCard index={index} rotate={rotate} onClick={() => onClick(value)}>
+        <WhiteCardValue>{value}</WhiteCardValue>
+      </HighCard>
+    );
+  } else {
+    return (
+      <Card index={index} rotate={rotate} onClick={() => onClick(value)}>
+        <WhiteCardValue>{value}</WhiteCardValue>
+      </Card>
+    );
   }
 }
+
+PokerCard.propTypes = {
+  high: PropTypes.bool.isRequired,
+  index: PropTypes.number.isRequired,
+  numCards: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
 
 export default PokerCard;
