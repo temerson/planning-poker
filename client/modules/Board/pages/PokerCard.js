@@ -40,6 +40,14 @@ const UnknownCard = styled(Card)`
 `;
 
 const WhiteCardValue = styled.h1`
+  @media only screen and (max-width: 850px) {
+    font-size: 1.4rem;
+  }
+
+  @media only screen and (max-width: 650px) {
+    font-size: 1.2rem;
+  }
+
   padding-left: 0.2rem;
   color: white;
 `;
@@ -64,14 +72,14 @@ const PokerCard = ({ high, index, numCards, onClick, value }) => {
         <WhiteCardValue>{value}</WhiteCardValue>
       </HighCard>
     );
-  } else {
-    return (
-      <Card index={index} rotate={rotate} onClick={() => onClick(value)}>
-        <WhiteCardValue>{value}</WhiteCardValue>
-      </Card>
-    );
   }
-}
+
+  return ( // TODO: linter doesn't allow else-if after return...that's annoying
+    <Card index={index} rotate={rotate} onClick={() => onClick(value)}>
+      <WhiteCardValue>{value}</WhiteCardValue>
+    </Card>
+  );
+};
 
 PokerCard.propTypes = {
   high: PropTypes.bool.isRequired,

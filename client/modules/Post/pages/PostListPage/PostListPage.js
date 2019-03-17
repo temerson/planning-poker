@@ -8,10 +8,10 @@ import PostCreateWidget from '../../components/PostCreateWidget/PostCreateWidget
 
 // Import Actions
 import { addPostRequest, fetchPosts, deletePostRequest } from '../../PostActions';
-import { toggleAddPost } from '../../../App/AppActions';
+import { toggleAddPost } from '../../../App/actions';
 
 // Import Selectors
-import { getShowAddPost } from '../../../App/AppReducer';
+import { getShowAddPost } from '../../../App/reducers';
 import { getPosts } from '../../PostReducer';
 
 class PostListPage extends Component {
