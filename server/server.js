@@ -45,6 +45,7 @@ import Helmet from 'react-helmet';
 import routes from '../client/routes';
 import { fetchComponentData } from './util/fetchData';
 import boards from './routes/board.routes';
+import tasks from './routes/task.routes';
 import serverConfig from './config';
 
 // Set native promises as mongoose promise
@@ -65,7 +66,8 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
-app.use('/api', boards);
+app.use('/api/boards', boards);
+app.use('/api/tasks', tasks);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {

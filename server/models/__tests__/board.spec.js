@@ -2,19 +2,21 @@ import test from 'ava';
 import request from 'supertest';
 import app from '../../server';
 import Board from '../board';
+import User from '../user';
 import { connectDB, dropDB } from '../../util/test-helpers';
 
 // Initial boards added into test db
+const user = new User({ username: 'Ricky' });
 const boards = [
   new Board({
     title: 'Red Squadron',
     slug: 'red-squadron',
-    owner: { username: 'tsoule' },
+    owner: user._id,
   }),
   new Board({
     title: 'Black Squadron',
     slug: 'black-squadron',
-    owner: { username: 'temerson' },
+    owner: user._id,
   }),
 ];
 
@@ -23,7 +25,8 @@ test.before('connect to mockgoose', async () => {
 });
 
 test.beforeEach('connect and add two board entries', async () => {
-  await Board.create(boards).catch(() => 'Unable to create boards');
+  await User.create(user);
+  await Board.create(boards);
 });
 
 test.afterEach.always(async () => {
@@ -39,26 +42,11 @@ test.serial('Should correctly give number of Boards', async t => {
   t.deepEqual(boards.length, res.body.boards.length);
 });
 
-test.serial('Should send correct data when queried against an id', async t => {
-  const board = new Board({
-    title: 'Rogue Squadron',
-    slug: 'rogue-squadron',
-    owner: { username: 'sbleve' },
-  });
-  board.save();
-
-  const res = await request(app)
-    .get(`/api/boards/${board._id}`)
-    .set('Accept', 'application/json');
-
-  t.is(res.status, 200);
-  t.is(res.body.board.name, board.name);
-});
-
 test.serial('Should correctly add a board', async t => {
+  console.error(user);
   const res = await request(app)
     .post('/api/boards/')
-    .send({ board: { title: 'Beige Squadron', slug: 'beige-squadron', owner: { username: 'sbleve' } } })
+    .send({ board: { title: 'Beige Squadron', owner: user._id } })
     .set('Accept', 'application/json');
 
   t.is(res.status, 200);
@@ -71,7 +59,7 @@ test.serial('Should correctly delete a board', async t => {
   const board = new Board({
     title: 'Rogue Squadron',
     slug: 'rogue-squadron',
-    owner: { username: 'sbleve' },
+    owner: user._id,
   });
   board.save();
 

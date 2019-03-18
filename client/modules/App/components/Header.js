@@ -32,7 +32,7 @@ const Title = styled.h1`
 
 const Welcome = styled.div``;
 
-const Header = ({ username }) => (
+export const Header = ({ username }) => (
   <Wrapper>
     <Content>
       <Title>

@@ -1,7 +1,6 @@
-import Board, { UserSchema } from '../models/board';
+import Board from '../models/board';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
-
 
 export function getBoards(req, res) {
   Board.find().sort('-dateAdded').exec((err, boards) => {
@@ -30,21 +29,12 @@ export function addBoard(req, res) {
   });
 }
 
-export function getBoard(req, res) {
-  Board.findOne({ slug: req.params.boardSlug }).exec((err, board) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.json(board);
-  });
-}
-
 export function deleteBoard(req, res) {
-  Board.findOne({ _id: req.params.boardId }).exec((err, board) => {
+  Board.findByIdAndDelete(req.params.boardId).exec(err => {
     if (err) {
       res.status(500).send(err);
     }
-    board.remove(() => res.status(200).end());
+    res.status(200).end();
   });
 }
 

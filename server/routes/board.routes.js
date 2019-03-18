@@ -2,13 +2,12 @@ import { Router } from 'express';
 import * as BoardController from '../controllers/board.controller';
 const router = new Router();
 
-router.route('/boards').get(BoardController.getBoards);
-router.route('/boards').post(BoardController.addBoard);
-router.route('/boards/:boardSlug').get(BoardController.getBoard);
-router.route('/boards/:boardSlug').delete(BoardController.deleteBoard);
+router.route('/').get(BoardController.getBoards);
+router.route('/').post(BoardController.addBoard);
+router.route('/:boardId').delete(BoardController.deleteBoard);
 
-router.route('/boards/:boardSlug/users').get(BoardController.getUsersOnBoard);
-router.route('/boards/:boardSlug/users').post(BoardController.addUserToBoard);
-router.route('/boards/:boardSlug/users/:username').post(BoardController.removeUserFromBoard);
+router.route('/:boardSlug/users').get(BoardController.getUsersOnBoard);
+router.route('/:boardSlug/users').post(BoardController.addUserToBoard);
+router.route('/:boardSlug/users/:username').post(BoardController.removeUserFromBoard);
 
 export default router;

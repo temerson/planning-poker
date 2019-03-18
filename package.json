@@ -30,6 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "^6.26.0",
+    "babel-plugin-styled-components": "^1.10.0",
     "body-parser": "^1.15.1",
     "compression": "^1.6.2",
     "cross-env": "^1.0.8",
