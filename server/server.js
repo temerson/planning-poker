@@ -1,4 +1,4 @@
-import Express, { Router } from 'express';
+import Express from 'express';
 import compression from 'compression';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
@@ -66,14 +66,6 @@ app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
 app.use('/api', boards);
-
-
-const encRouter = new Router();
-encRouter.route('/acme-challenge/b05fe7588a112ed2d0d0da28150684c9').get((req, res) => {
-  res.send('b05fe7588a112ed2d0d0da28150684c9.zYZWbDQJDEDNxRwYj5o9Qj9em3QpqDrnZeAUcQPSGfU');
-});
-
-app.use('/.well-known', encRouter);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
