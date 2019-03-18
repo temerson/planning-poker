@@ -51,7 +51,7 @@ export function deleteBoard(req, res) {
 // ---------------------- users on a given board -------------------------------
 
 export function getUsersOnBoard(req, res) {
-  Board.findOne({ _id: req.params.boardId }).exec((err, board) => {
+  Board.findOne({ slug: req.params.boardSlug }).exec((err, board) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -62,13 +62,20 @@ export function getUsersOnBoard(req, res) {
 }
 
 export function addUserToBoard(req, res) {
-  Board.findOne({ _id: req.params.boardId }).exec((err, board) => {
+  const { user } = req.body;
+  if (!user || !user.username) {
+    res.status(403).end();
+  }
+
+  Board.findOne({ slug: req.params.boardSlug }).exec((err, board) => {
     if (err) {
       res.status(500).send(err);
     }
 
-    const newUser = new UserSchema(req.user);
-    newUser.username = sanitizeHtml(newUser.username);
+    const newUser = {
+      ...user,
+      username: sanitizeHtml(user.username),
+    };
 
     const newBoard = new Board(board);
     newBoard.users = [...board.users, newUser];
@@ -83,13 +90,13 @@ export function addUserToBoard(req, res) {
 }
 
 export function removeUserFromBoard(req, res) {
-  Board.findOne({ _id: req.params.boardId }).exec((err, board) => {
+  Board.findOne({ slug: req.params.boardSlug }).exec((err, board) => {
     if (err) {
       res.status(500).send(err);
     }
 
     const newBoard = new Board(board);
-    newBoard.users = board.users.filter(user => user._id !== req.params.userId);
+    newBoard.users = board.users.filter(user => user.username !== req.params.username);
 
     newBoard.save((saveErr, saved) => {
       if (saveErr) {

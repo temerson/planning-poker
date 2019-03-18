@@ -4,7 +4,6 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button, Error, Input, Title, Wrapper } from '../../../components';
 import { addBoardRequest } from '../actions';
-import { setUser } from '../../App/actions';
 
 
 class RegisterBoard extends React.Component {
@@ -35,7 +34,6 @@ class RegisterBoard extends React.Component {
     }
 
     dispatch(addBoardRequest(boardName, username, router));
-    dispatch(setUser(username));
   }
 
   render() {

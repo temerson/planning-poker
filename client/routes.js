@@ -50,7 +50,7 @@ export default (
       }}
     />
     <Route
-      path="/boards/:slug"
+      path="/boards/:boardSlug"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
           cb(null, require('./modules/Board/pages/Board').default);

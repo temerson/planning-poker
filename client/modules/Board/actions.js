@@ -1,4 +1,5 @@
 import callApi from '../../util/apiCaller';
+import { setUser } from '../App/actions';
 
 export const ADD_BOARD = 'ADD_BOARD';
 export const ADD_BOARDS = 'ADD_BOARDS';
@@ -17,15 +18,17 @@ export function addBoards(boards) {
   };
 }
 
-
 export function addBoardRequest(title, username, router) {
-  return () => {
+  return (dispatch) => {
     return callApi('boards', 'post', {
       board: {
         title,
         owner: { username },
       },
-    }).then(res => router.push(`/boards/${res.slug}`));
+    }).then(res => {
+      router.push(`/boards/${res.slug}`);
+      dispatch(setUser(username));
+    });
   };
 }
 
@@ -40,5 +43,16 @@ export function getBoardRequest(slug) {
   return (dispatch) => {
     return callApi(`boards/${slug}`, 'get')
       .then(res => dispatch(addBoard(res)));
+  };
+}
+
+export function addUserToBoardRequest(username, slug) {
+  return (dispatch) => {
+    return callApi(`boards/${slug}/users`, 'post', {
+      user: { username },
+    }).then(() => {
+      dispatch(getBoardRequest(slug));
+      dispatch(setUser(username));
+    });
   };
 }

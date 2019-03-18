@@ -8,8 +8,10 @@ import BoardHistory from './BoardHistory';
 import BoardMembers from './BoardMembers';
 import BoardStatus from './BoardStatus';
 import BoardTask from './BoardTask';
+import RegisterUser from './RegisterUser';
 import { getBoardRequest } from '../actions';
 import { getBoard } from '../reducers';
+import { getUsername } from '../../App/reducers';
 
 const Wrapper = styled.div`
   display: grid;
@@ -24,16 +26,23 @@ class Board extends React.Component {
     board: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
+    username: PropTypes.string,
   };
 
   componentDidMount() {
     const { dispatch, params } = this.props;
-    dispatch(getBoardRequest(params.slug));
+    dispatch(getBoardRequest(params.boardSlug));
   }
 
   render() {
-    const { board } = this.props;
+    const { board, username } = this.props;
     if (!board) return null;
+
+    if (!username) {
+      return (
+        <RegisterUser />
+      );
+    }
 
     return (
       <Wrapper>
@@ -49,5 +58,6 @@ class Board extends React.Component {
 }
 
 export default connect((state, props) => ({
-  board: getBoard(state, props.params.slug),
+  board: getBoard(state, props.params.boardSlug),
+  username: getUsername(state),
 }))(Board);
