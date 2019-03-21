@@ -18,16 +18,15 @@ export function addBoards(boards) {
   };
 }
 
-export function addBoardRequest(title, username, router) {
-  return (dispatch) => {
+export function addBoardRequest(title, userId, router) {
+  return () => {
     return callApi('boards', 'post', {
       board: {
         title,
-        owner: { username },
+        owner: userId,
       },
     }).then(res => {
-      router.push(`/boards/${res.slug}`);
-      dispatch(setUser(username));
+      router.push(`boards/${res.slug}`);
     });
   };
 }
@@ -46,13 +45,14 @@ export function getBoardRequest(slug) {
   };
 }
 
-export function addUserToBoardRequest(username, slug) {
+export function addUserToBoardRequest(userId, slug) {
   return (dispatch) => {
-    return callApi(`boards/${slug}/users`, 'post', {
-      user: { username },
-    }).then(() => {
-      dispatch(getBoardRequest(slug));
-      dispatch(setUser(username));
-    });
+    return callApi(`boards/${slug}/users`, 'post', { userId })
+      .then(() => dispatch(getBoardRequest(slug)));
   };
+}
+
+export function registerUserRequest(username, boardSlug) {
+  return (dispatch) => callApi('users', 'post', { username })
+    .then((res) => addUserToBoardRequest(res.body._id, boardSlug)(dispatch)); // eew
 }

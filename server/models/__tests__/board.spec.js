@@ -36,14 +36,13 @@ test.afterEach.always(async () => {
 test.serial('Should correctly give number of Boards', async t => {
   const res = await request(app)
     .get('/api/boards/')
-    .set('Accept', 'application/json');
+    .set('Accept', 'applicationjson');
 
   t.is(res.status, 200);
   t.deepEqual(boards.length, res.body.boards.length);
 });
 
 test.serial('Should correctly add a board', async t => {
-  console.error(user);
   const res = await request(app)
     .post('/api/boards/')
     .send({ board: { title: 'Beige Squadron', owner: user._id } })

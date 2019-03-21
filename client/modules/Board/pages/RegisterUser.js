@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button, Error, Input, Title, Wrapper } from '../../../components';
-import { addUserToBoardRequest } from '../actions';
+import { addUserToBoardRequest, registerUserRequest } from '../actions';
 
 
 class RegisterUser extends React.Component {
@@ -27,7 +27,7 @@ class RegisterUser extends React.Component {
       return;
     }
 
-    dispatch(addUserToBoardRequest(username, params.boardSlug));
+    dispatch(registerUserRequest(username, params.boardSlug));
   }
 
   render() {

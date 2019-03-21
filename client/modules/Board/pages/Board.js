@@ -9,7 +9,7 @@ import BoardMembers from './BoardMembers';
 import BoardStatus from './BoardStatus';
 import BoardTask from './BoardTask';
 import RegisterUser from './RegisterUser';
-import { getBoardRequest } from '../actions';
+import { getBoardsRequest } from '../actions';
 import { getBoard } from '../reducers';
 import { getUsername } from '../../App/reducers';
 
@@ -30,8 +30,8 @@ class Board extends React.Component {
   };
 
   componentDidMount() {
-    const { dispatch, params } = this.props;
-    dispatch(getBoardRequest(params.boardSlug));
+    const { dispatch } = this.props;
+    dispatch(getBoardsRequest());
   }
 
   render() {

@@ -46,6 +46,7 @@ import routes from '../client/routes';
 import { fetchComponentData } from './util/fetchData';
 import boards from './routes/board.routes';
 import tasks from './routes/task.routes';
+import users from './routes/user.routes';
 import serverConfig from './config';
 
 // Set native promises as mongoose promise
@@ -68,6 +69,7 @@ app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
 app.use('/api/boards', boards);
 app.use('/api/tasks', tasks);
+app.use('/api/users', users);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
