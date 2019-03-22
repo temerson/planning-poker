@@ -59,7 +59,7 @@ const PokerCard = ({ high, index, numCards, onClick, value }) => {
   const half = numCards / 2;
   const step = 1.5;
   const rotate = (half * -1) + (index * step) - step;
-  const offset = (half * -1) + index;
+  const offset = (half * -1) + index - step / 2;
 
   if (value === '?') {
     return (

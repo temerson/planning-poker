@@ -18,9 +18,9 @@ export function registerUser(req, res) {
       res.status(500).send(err);
     } else {
       res.setHeader('Set-Cookie', cookie.serialize('user', saved._id, {
-        httpOnly: true,
         maxAge: 60 * 60 * 24, // 1 day
       }));
+      res.send(saved);
     }
   });
 }

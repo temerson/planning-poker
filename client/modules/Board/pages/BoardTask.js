@@ -1,9 +1,10 @@
 import React from 'react';
+import { Input, TextArea } from '../../../components';
 
 const BoardTasks = () => (
   <div>
-    <input type="text" placeholder="Task Title" />
-    <textarea placeholder="Description" />
+    <Input type="text" placeholder="Task Title" />
+    <TextArea placeholder="Description" rows="5" cols="50" />
   </div>
 );
 

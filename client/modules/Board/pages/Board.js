@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { Cookies, withCookies } from 'react-cookie';
 import BoardActions from './BoardActions';
 import BoardCards from './BoardCards';
 import BoardHistory from './BoardHistory';
@@ -14,19 +15,35 @@ import { getBoard } from '../reducers';
 import { getUsername } from '../../App/reducers';
 
 const Wrapper = styled.div`
+  padding: 0 2rem;
   display: grid;
+  height: 100%;
+
   grid-template-areas: "actions actions actions actions"
     "members status task history"
     "cards cards cards cards";
-  height: 100%;
+
+  @media screen and (max-width: 850px) {
+    grid-template-areas: "actions actions"
+      "members status"
+      "task history"
+      "cards cards";
+  }
+
+  @media screen and (max-width: 650px) {
+    grid-template-areas: "actions"
+      "task"
+      "cards";
+    /* TODO: hide other components */
+  }
 `;
 
 class Board extends React.Component {
   static propTypes = {
     board: PropTypes.object,
+    cookies: PropTypes.instanceOf(Cookies).isRequired,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
-    username: PropTypes.string,
   };
 
   componentDidMount() {
@@ -35,10 +52,11 @@ class Board extends React.Component {
   }
 
   render() {
-    const { board, username } = this.props;
+    const { board, cookies } = this.props;
+    const user = cookies.get('user');
     if (!board) return null;
 
-    if (!username) {
+    if (!user) {
       return (
         <RegisterUser />
       );
@@ -60,4 +78,4 @@ class Board extends React.Component {
 export default connect((state, props) => ({
   board: getBoard(state, props.params.boardSlug),
   username: getUsername(state),
-}))(Board);
+}))(withCookies(Board));
