@@ -9,4 +9,6 @@ router.route('/:boardId').delete(BoardController.deleteBoard);
 router.route('/:boardSlug/users').get(BoardController.getUsersOnBoard);
 router.route('/:boardSlug/users').post(BoardController.addUserToBoard);
 
+router.route('/:boardSlug/tasks').put(BoardController.changeActiveTask);
+
 export default router;

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { css } from 'styled-components';
-import { Cookies, withCookies } from 'react-cookie';
+import styled from 'styled-components';
 import BoardActions from './BoardActions';
 import BoardCards from './BoardCards';
 import BoardHistory from './BoardHistory';
@@ -41,9 +40,9 @@ const Wrapper = styled.div`
 class Board extends React.Component {
   static propTypes = {
     board: PropTypes.object,
-    cookies: PropTypes.instanceOf(Cookies).isRequired,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
+    username: PropTypes.string,
   };
 
   componentDidMount() {
@@ -52,11 +51,11 @@ class Board extends React.Component {
   }
 
   render() {
-    const { board, cookies } = this.props;
-    const user = cookies.get('user');
+    const { board, username } = this.props;
+
     if (!board) return null;
 
-    if (!user) {
+    if (!username) {
       return (
         <RegisterUser />
       );
@@ -78,4 +77,4 @@ class Board extends React.Component {
 export default connect((state, props) => ({
   board: getBoard(state, props.params.boardSlug),
   username: getUsername(state),
-}))(withCookies(Board));
+}))(Board);

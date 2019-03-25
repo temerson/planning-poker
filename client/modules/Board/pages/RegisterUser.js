@@ -27,7 +27,9 @@ class RegisterUser extends React.Component {
       return;
     }
 
-    dispatch(registerUserRequest(username, params.boardSlug));
+    dispatch(registerUserRequest(username, (res) => {
+      dispatch(addUserToBoardRequest(res._id, params.boardSlug));
+    }));
   }
 
   render() {

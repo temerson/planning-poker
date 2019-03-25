@@ -12,13 +12,13 @@ require('./main.css');
 
 export default function App(props) {
   return (
-    <CookiesProvider>
-      <Provider store={props.store}>
-        <Router history={browserHistory}>
+    <Provider store={props.store}>
+      <Router history={browserHistory}>
+        <CookiesProvider>
           {routes}
-        </Router>
-      </Provider>
-    </CookiesProvider>
+        </CookiesProvider>
+      </Router>
+    </Provider>
   );
 }
 

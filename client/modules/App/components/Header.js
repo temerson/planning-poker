@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router';
+import { Cookies, withCookies } from 'react-cookie';
 import { getUsername } from '../reducers';
 import backgroundImage from '../header-bk.png';
+import { getUserRequest } from '../actions';
 
 const Wrapper = styled.div`
   background: #eee url(${backgroundImage}) center;
@@ -20,7 +22,7 @@ const Content = styled.div`
   overflow: auto;
 `;
 const Title = styled.h1`
-  font-weight: 300;
+  font-weight: 500;
   font-size: 42px;
   float: left;
 
@@ -32,27 +34,38 @@ const Title = styled.h1`
 
 const Welcome = styled.div``;
 
-export const Header = ({ username }) => (
-  <Wrapper>
-    <Content>
-      <Title>
-        <Link to="/"><span id="siteTitle">Planning Poker</span></Link>
-      </Title>
+class Header extends React.Component {
+  static propTypes = {
+    cookies: PropTypes.instanceOf(Cookies).isRequired,
+    dispatch: PropTypes.func.isRequired,
+    username: PropTypes.string,
+  };
 
-      {username && <Welcome>Hi there {username}</Welcome>}
-    </Content>
-  </Wrapper>
-);
+  componentDidMount() {
+    const { cookies, dispatch, username } = this.props;
+    const userId = cookies.get('userId');
 
+    if (userId && !username) {
+      dispatch(getUserRequest(userId));
+    }
+  }
 
-Header.contextTypes = {
-  router: PropTypes.object,
-};
+  render() {
+    const { username } = this.props;
+    return (
+      <Wrapper>
+        <Content>
+          <Title>
+            <Link to="/"><span id="siteTitle">Planning Poker</span></Link>
+          </Title>
 
-Header.propTypes = {
-  username: PropTypes.string,
-};
+          {username && <Welcome>Hi there {username}</Welcome>}
+        </Content>
+      </Wrapper>
+    );
+  }
+}
 
 export default connect((state) => ({
   username: getUsername(state),
-}))(Header);
+}))(withCookies(Header));

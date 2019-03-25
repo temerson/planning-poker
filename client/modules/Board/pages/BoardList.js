@@ -18,12 +18,16 @@ class BoardList extends React.Component {
 
   render() {
     const { boards } = this.props;
+    const hasBoards = boards.length > 0;
+    const title = hasBoards ? 'Pick a Board' : 'No public boards available';
+
     return (
       <Wrapper>
-        <Title>Pick a Board</Title>
-        {boards.map((board, index) => (
+        <Title>{title}</Title>
+        {hasBoards && boards.map((board, index) => (
           <LinkButton key={index} to={`/boards/${board.slug}`}>{board.title}</LinkButton>
         ))}
+        {!hasBoards && <LinkButton to="/new-board">Start a new board</LinkButton>}
       </Wrapper>
     );
   }

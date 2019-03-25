@@ -47,6 +47,7 @@ import { fetchComponentData } from './util/fetchData';
 import boards from './routes/board.routes';
 import tasks from './routes/task.routes';
 import users from './routes/user.routes';
+import tools from './routes/tools.routes'; // TODO: remove
 import serverConfig from './config';
 
 // Set native promises as mongoose promise
@@ -70,6 +71,7 @@ app.use(Express.static(path.resolve(__dirname, '../dist/client')));
 app.use('/api/boards', boards);
 app.use('/api/tasks', tasks);
 app.use('/api/users', users);
+app.use('/api/tools', tools); // TODO: remove
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {

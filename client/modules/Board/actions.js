@@ -1,5 +1,4 @@
 import callApi from '../../util/apiCaller';
-import { setUser } from '../App/actions';
 
 export const ADD_BOARD = 'ADD_BOARD';
 export const ADD_BOARDS = 'ADD_BOARDS';
@@ -18,16 +17,15 @@ export function addBoards(boards) {
   };
 }
 
-export function addBoardRequest(title, userId, router) {
+export function addBoardRequest(title, username, userId, callback) {
   return () => {
     return callApi('boards', 'post', {
       board: {
         title,
         owner: userId,
       },
-    }).then(res => {
-      router.push(`boards/${res.slug}`);
-    });
+      username,
+    }).then(callback);
   };
 }
 
@@ -46,13 +44,13 @@ export function getBoardRequest(slug) {
 }
 
 export function addUserToBoardRequest(userId, slug) {
-  return (dispatch) => {
-    return callApi(`boards/${slug}/users`, 'post', { userId })
-      .then(() => dispatch(getBoardRequest(slug)));
-  };
+  return () => callApi(`boards/${slug}/users`, 'post', { userId });
 }
 
-export function registerUserRequest(username, boardSlug) {
-  return (dispatch) => callApi('users', 'post', { username })
-    .then((res) => addUserToBoardRequest(res.body._id, boardSlug)(dispatch)); // eew
+export function registerUserRequest(username, callback) {
+  return () => callApi('users', 'post', { username }).then(callback);
+}
+
+export function taskChanged(boardSlug, title, description) {
+  return () => callApi(`boards/${boardSlug}/tasks`, 'put', { title, description });
 }
