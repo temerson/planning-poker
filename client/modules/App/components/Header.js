@@ -12,19 +12,20 @@ const Wrapper = styled.div`
   background: #eee url(${backgroundImage}) center;
   background-size: cover;
   border-bottom: 1px solid #ccc;
-`;
 
-const Content = styled.div`
   width: 100%;
   max-width: 980px;
   margin: auto;
   padding: 16px;
-  overflow: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
+
 const Title = styled.h1`
   font-weight: 500;
   font-size: 42px;
-  float: left;
 
   > a {
     text-decoration: none;
@@ -32,7 +33,11 @@ const Title = styled.h1`
   }
 `;
 
-const Welcome = styled.div``;
+const Welcome = styled.div`
+  font-weight: 500;
+  font-size: 22px;
+  color: #FFF;
+`;
 
 class Header extends React.Component {
   static propTypes = {
@@ -54,13 +59,11 @@ class Header extends React.Component {
     const { username } = this.props;
     return (
       <Wrapper>
-        <Content>
-          <Title>
-            <Link to="/"><span id="siteTitle">Planning Poker</span></Link>
-          </Title>
+        <Title>
+          <Link to="/"><span id="siteTitle">Planning Poker</span></Link>
+        </Title>
 
-          {username && <Welcome>Hi there {username}</Welcome>}
-        </Content>
+        {username && <Welcome>Welcome {username}!</Welcome>}
       </Wrapper>
     );
   }
