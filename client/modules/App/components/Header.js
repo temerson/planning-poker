@@ -14,7 +14,6 @@ const Wrapper = styled.div`
   border-bottom: 1px solid #ccc;
 
   width: 100%;
-  max-width: 980px;
   margin: auto;
   padding: 16px;
 
