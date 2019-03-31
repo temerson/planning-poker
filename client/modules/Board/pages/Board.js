@@ -9,7 +9,12 @@ import BoardMembers from './BoardMembers';
 import BoardStatus from './BoardStatus';
 import BoardTask from './BoardTask';
 import RegisterUser from './RegisterUser';
-import { addUserToBoardRequest, getActiveTaskRequest, removeUserFromBoardRequest } from '../actions';
+import {
+  addUserToBoardRequest,
+  getActiveTaskRequest,
+  getBoardsRequest,
+  removeUserFromBoardRequest,
+} from '../actions';
 import { getActiveTask, getBoard } from '../reducers';
 
 const Wrapper = styled.div`
@@ -48,16 +53,18 @@ class Board extends React.Component {
   componentDidMount() {
     const { board, dispatch, userId } = this.props;
     if (board && userId) {
-      dispatch(getActiveTaskRequest(board.activeTask));
       dispatch(addUserToBoardRequest(board._id));
+      this.fetchTask(board.activeTask);
+      this.setTimers(board);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { board, dispatch } = this.props;
     if (!board && board !== nextProps.board) {
-      dispatch(getActiveTaskRequest(nextProps.board.activeTask));
       dispatch(addUserToBoardRequest(nextProps.board._id));
+      this.fetchTask(nextProps.board.activeTask);
+      this.setTimers(nextProps.board);
     }
   }
 
@@ -66,7 +73,24 @@ class Board extends React.Component {
     if (board && userId) {
       dispatch(removeUserFromBoardRequest(board._id, userId));
     }
+    this.boardTimer = null;
+    this.taskTimer = null;
   }
+
+  setTimers = (board) => {
+    this.taskTimer = setInterval(() => this.fetchTask(board.activeTask), 5000);
+    this.boardTimer = setInterval(() => this.fetchBoard(board), 5000);
+  }
+
+  fetchBoard = () => {
+    // currently this is how we get updated member lists, but it's super inefficient
+    this.props.dispatch(getBoardsRequest());
+  }
+
+  fetchTask = (task) => {
+    this.props.dispatch(getActiveTaskRequest(task));
+  }
+
 
   render() {
     const { activeTask, board, userId } = this.props;

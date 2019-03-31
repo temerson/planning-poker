@@ -25,6 +25,13 @@ class BoardCards extends React.Component {
     userVote: PropTypes.object,
   }
 
+  componentWillUnmount() {
+    const { dispatch, task, userVote } = this.props;
+    if (userVote) {
+      dispatch(removeVote(task._id, userVote._id));
+    }
+  }
+
   handleCardClick = (value) => {
     const { dispatch, task, userVote } = this.props;
     if (userVote && userVote.value === value) {

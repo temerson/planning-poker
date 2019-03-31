@@ -8,7 +8,7 @@ router.route('/:boardId').delete(BoardController.deleteBoard);
 
 router.route('/:boardSlug/users').get(BoardController.getUsersOnBoard);
 router.route('/:boardId/users').post(BoardController.addUserToBoard);
-router.route('/:boardId/users/:userId').post(BoardController.removeUserFromBoard);
+router.route('/:boardId/users/:userId').delete(BoardController.removeUserFromBoard);
 
 router.route('/:boardSlug/tasks').put(BoardController.changeActiveTask);
 
