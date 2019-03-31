@@ -42,12 +42,12 @@ class Board extends React.Component {
     board: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
-    user: PropTypes.object,
+    userId: PropTypes.string,
   };
 
   componentDidMount() {
-    const { board, dispatch } = this.props;
-    if (board) {
+    const { board, dispatch, userId } = this.props;
+    if (board && userId) {
       dispatch(getActiveTaskRequest(board.activeTask));
       dispatch(addUserToBoardRequest(board._id));
     }
@@ -62,18 +62,18 @@ class Board extends React.Component {
   }
 
   componentWillUnmount() {
-    const { board, dispatch, user } = this.props;
-    if (board && user) {
-      dispatch(removeUserFromBoardRequest(board._id, user._id));
+    const { board, dispatch, userId } = this.props;
+    if (board && userId) {
+      dispatch(removeUserFromBoardRequest(board._id, userId));
     }
   }
 
   render() {
-    const { activeTask, board, user } = this.props;
+    const { activeTask, board, userId } = this.props;
 
     if (!board) return null;
 
-    if (!user) {
+    if (!userId) {
       return (
         <RegisterUser />
       );
@@ -95,5 +95,5 @@ class Board extends React.Component {
 export default connect((state, props) => ({
   activeTask: getActiveTask(state),
   board: getBoard(state, props.params.boardSlug),
-  user: state.app.user,
+  userId: state.app.user._id,
 }))(Board);

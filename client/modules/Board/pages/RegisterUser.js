@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button, Error, Input, Title, Wrapper } from '../../../components';
+import { setCookies } from '../../App/actions';
 import { addUserToBoardRequest, registerUserRequest } from '../actions';
-
 
 class RegisterUser extends React.Component {
   static propTypes = {
@@ -28,6 +28,7 @@ class RegisterUser extends React.Component {
     }
 
     dispatch(registerUserRequest(username, (res) => {
+      dispatch(setCookies(document.cookie));
       dispatch(addUserToBoardRequest(res._id, params.boardSlug));
     }));
   }

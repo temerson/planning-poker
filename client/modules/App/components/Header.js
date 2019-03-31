@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router';
-import { Cookies, withCookies } from 'react-cookie';
-import { getUsername } from '../reducers';
+import { getCookies, getUsername } from '../reducers';
 import backgroundImage from '../header-bk.png';
 import { getUserRequest } from '../actions';
 
@@ -40,14 +39,23 @@ const Welcome = styled.div`
 
 class Header extends React.Component {
   static propTypes = {
-    cookies: PropTypes.instanceOf(Cookies).isRequired,
+    cookies: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     username: PropTypes.string,
   };
 
   componentDidMount() {
     const { cookies, dispatch, username } = this.props;
-    const userId = cookies.get('userId');
+    const userId = cookies.userId;
+
+    if (userId && !username) {
+      dispatch(getUserRequest(userId));
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { cookies, dispatch, username } = nextProps;
+    const userId = cookies.userId;
 
     if (userId && !username) {
       dispatch(getUserRequest(userId));
@@ -70,4 +78,5 @@ class Header extends React.Component {
 
 export default connect((state) => ({
   username: getUsername(state),
-}))(withCookies(Header));
+  cookies: getCookies(state),
+}))(Header);

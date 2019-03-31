@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { setCookies } from './actions';
 
 // Import Components
 import Helmet from 'react-helmet';
@@ -28,6 +30,7 @@ const FullHeight = styled.div`
 export class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -37,6 +40,7 @@ export class App extends Component {
 
   componentDidMount() {
     this.setState({isMounted: true}); // eslint-disable-line
+    this.props.dispatch(setCookies(document.cookie));
   }
 
   render() {
@@ -70,4 +74,4 @@ export class App extends Component {
   }
 }
 
-export default App;
+export default connect()(App);

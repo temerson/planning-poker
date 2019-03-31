@@ -26,6 +26,15 @@ export function updateBoard(board) {
   };
 }
 
+function setActiveTask(task) {
+  return {
+    type: SET_ACTIVE_TASK,
+    task,
+  };
+}
+
+// Async actions -----------------------------------------------
+
 export function addBoardRequest(title, username, userId, callback) {
   return () => {
     return callApi('boards', 'post', {
@@ -61,13 +70,6 @@ export function registerUserRequest(username, callback) {
 
 export function taskChanged(taskId, title, description) {
   return () => callApi(`tasks/${taskId}`, 'put', { title, description });
-}
-
-function setActiveTask(task) {
-  return {
-    type: SET_ACTIVE_TASK,
-    task,
-  };
 }
 
 export function getActiveTaskRequest(taskId) {
