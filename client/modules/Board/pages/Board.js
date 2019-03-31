@@ -9,9 +9,8 @@ import BoardMembers from './BoardMembers';
 import BoardStatus from './BoardStatus';
 import BoardTask from './BoardTask';
 import RegisterUser from './RegisterUser';
-import { getActiveTaskRequest } from '../actions';
+import { addUserToBoardRequest, getActiveTaskRequest, removeUserFromBoardRequest } from '../actions';
 import { getActiveTask, getBoard } from '../reducers';
-import { getUsername } from '../../App/reducers';
 
 const Wrapper = styled.div`
   padding: 0 2rem;
@@ -43,29 +42,38 @@ class Board extends React.Component {
     board: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
-    username: PropTypes.string,
+    user: PropTypes.object,
   };
 
   componentDidMount() {
     const { board, dispatch } = this.props;
     if (board) {
       dispatch(getActiveTaskRequest(board.activeTask));
+      dispatch(addUserToBoardRequest(board._id));
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { board, dispatch } = this.props;
-    if (board !== nextProps.board && nextProps.board) {
+    if (!board && board !== nextProps.board) {
       dispatch(getActiveTaskRequest(nextProps.board.activeTask));
+      dispatch(addUserToBoardRequest(nextProps.board._id));
+    }
+  }
+
+  componentWillUnmount() {
+    const { board, dispatch, user } = this.props;
+    if (board && user) {
+      dispatch(removeUserFromBoardRequest(board._id, user._id));
     }
   }
 
   render() {
-    const { activeTask, board, username } = this.props;
+    const { activeTask, board, user } = this.props;
 
     if (!board) return null;
 
-    if (!username) {
+    if (!user) {
       return (
         <RegisterUser />
       );
@@ -87,5 +95,5 @@ class Board extends React.Component {
 export default connect((state, props) => ({
   activeTask: getActiveTask(state),
   board: getBoard(state, props.params.boardSlug),
-  username: getUsername(state),
+  user: state.app.user,
 }))(Board);

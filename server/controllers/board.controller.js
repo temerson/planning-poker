@@ -7,6 +7,7 @@ import Task from '../models/task';
 
 export function getBoards(req, res) {
   Board.find()
+    .populate('users')
     .sort('-dateAdded')
     .then(boards => res.json({ boards }))
     .catch(err => res.status(500).send(err));
@@ -77,30 +78,46 @@ export function getUsersOnBoard(req, res) {
 }
 
 export function addUserToBoard(req, res) {
-  const { userId } = req.body;
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const userId = cookies.userId;
   if (!userId) {
     res.status(403).end();
   }
 
-  Board.findOne({ slug: req.params.boardSlug }).exec((err, board) => {
-    if (err) {
-      res.status(500).send(err);
-    }
+  Board.findById(req.params.boardId)
+    .populate('users')
+    .then(board => {
+      if (board.users.find(user => user.equals(userId))) {
+        res.status(200).send(board);
+      } else {
+        const newBoard = new Board(board);
+        newBoard.users = [...board.users, userId];
+        newBoard.save()
+          .then(saved => res.json(saved))
+          .catch(err => res.status(500).send(err));
+      }
+    })
+    .catch(err => res.status(500).send(err));
+}
 
-    if (board.users.find(user => user._id === userId)) {
-      res.send(200);
-    } else {
+export function removeUserFromBoard(req, res) {
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const userId = cookies.userId;
+  if (!userId) {
+    res.status(403).send('a userId cookie is required');
+  }
+  // TODO: validate userId in route is logged in user, or logged in user is owner
+
+  Board.findById(req.params.boardId)
+    .populate('users')
+    .then(board => {
       const newBoard = new Board(board);
-      newBoard.users = [...board.users, userId];
-
-      newBoard.save((saveErr, saved) => {
-        if (saveErr) {
-          res.status(500).send(saveErr);
-        }
-        res.json(saved);
-      });
-    }
-  });
+      newBoard.users = board.users.filter(user => !user.equals(userId));
+      newBoard.save()
+        .then(saved => res.json(saved))
+        .catch(err => res.status(500).send(err));
+    })
+    .catch(err => res.status(500).send(err));
 }
 
 // ---------------------- tasks on a given board -------------------------------

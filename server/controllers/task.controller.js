@@ -1,4 +1,4 @@
-import Task, { Vote } from '../models/task';
+import Task from '../models/task';
 import sanitizeHtml from 'sanitize-html';
 import cookie from 'cookie';
 

@@ -1,4 +1,9 @@
-import { ADD_BOARD, ADD_BOARDS, SET_ACTIVE_TASK } from './actions';
+import {
+  ADD_BOARD,
+  ADD_BOARDS,
+  SET_ACTIVE_TASK,
+  UPDATE_BOARD,
+} from './actions';
 
 export const boardsReducer = (state = [], action) => {
   switch (action.type) {
@@ -6,6 +11,10 @@ export const boardsReducer = (state = [], action) => {
       return [...state, action.board];
     case ADD_BOARDS:
       return action.boards || [];
+    case UPDATE_BOARD:
+      return state.map(board => (board.id === action.board.id
+        ? action.board
+        : board));
     default:
       return state;
   }
