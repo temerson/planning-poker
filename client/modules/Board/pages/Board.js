@@ -9,8 +9,8 @@ import BoardMembers from './BoardMembers';
 import BoardStatus from './BoardStatus';
 import BoardTask from './BoardTask';
 import RegisterUser from './RegisterUser';
-import { getBoardsRequest } from '../actions';
-import { getBoard } from '../reducers';
+import { getActiveTaskRequest } from '../actions';
+import { getActiveTask, getBoard } from '../reducers';
 import { getUsername } from '../../App/reducers';
 
 const Wrapper = styled.div`
@@ -39,6 +39,7 @@ const Wrapper = styled.div`
 
 class Board extends React.Component {
   static propTypes = {
+    activeTask: PropTypes.object,
     board: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
@@ -46,12 +47,21 @@ class Board extends React.Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(getBoardsRequest());
+    const { board, dispatch } = this.props;
+    if (board) {
+      dispatch(getActiveTaskRequest(board.activeTask));
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { board, dispatch } = this.props;
+    if (board !== nextProps.board && nextProps.board) {
+      dispatch(getActiveTaskRequest(nextProps.board.activeTask));
+    }
   }
 
   render() {
-    const { board, username } = this.props;
+    const { activeTask, board, username } = this.props;
 
     if (!board) return null;
 
@@ -64,17 +74,18 @@ class Board extends React.Component {
     return (
       <Wrapper>
         <BoardActions style="grid-area: actions" />
-        <BoardMembers style="grid-area: members" members={board.users} />
-        <BoardStatus style="grid-area: status" />
-        <BoardTask style="grid-area: task" />
+        <BoardMembers style="grid-area: members" task={activeTask} members={board.users} />
+        <BoardStatus style="grid-area: status" board={board} />
+        <BoardTask style="grid-area: task" task={activeTask} />
         <BoardHistory style="grid-area: history" />
-        <BoardCards style="grid-area: cards" />
+        <BoardCards style="grid-area: cards" task={activeTask} />
       </Wrapper>
     );
   }
 }
 
 export default connect((state, props) => ({
+  activeTask: getActiveTask(state),
   board: getBoard(state, props.params.boardSlug),
   username: getUsername(state),
 }))(Board);

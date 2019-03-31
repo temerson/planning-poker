@@ -18,10 +18,11 @@ class RegisterBoard extends React.Component {
     this.state = {};
   }
 
-  handleButtonClick() {
+  handleButtonClick = () => {
     const { dispatch, router, userId } = this.props;
 
-    const username = document.querySelector('#username').value;
+    const usernameField = document.querySelector('#username');
+    const username = usernameField && usernameField.value;
     const boardName = document.querySelector('#name').value;
 
     if (!username && !userId) {
@@ -56,7 +57,7 @@ class RegisterBoard extends React.Component {
 
         {error && <Error>{error}</Error>}
 
-        <Button onClick={e => this.handleButtonClick(e)}>I'm so ready</Button>
+        <Button onClick={this.handleButtonClick}>I'm so ready</Button>
       </Wrapper>
     );
   }

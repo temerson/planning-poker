@@ -24,6 +24,7 @@ const Card = styled.div`
     left: calc(${props => props.offset} * 2rem);
   }
 
+  &.active,
   &:hover {
     box-shadow: 4px 4px 4px #3c3c3c;
     transform: translate(0, -1rem);
@@ -55,7 +56,7 @@ const BlackCardValue = styled(WhiteCardValue)`
   color: black;
 `;
 
-const PokerCard = ({ high, index, numCards, onClick, value }) => {
+const PokerCard = ({ active, high, index, numCards, onClick, value }) => {
   const half = numCards / 2;
   const step = 1.5;
   const rotate = (half * -1) + (index * step) - step;
@@ -63,26 +64,27 @@ const PokerCard = ({ high, index, numCards, onClick, value }) => {
 
   if (value === '?') {
     return (
-      <UnknownCard offset={offset} rotate={rotate} onClick={() => onClick(value)}>
+      <UnknownCard className={active && 'active'} offset={offset} rotate={rotate} onClick={() => onClick(value)}>
         <BlackCardValue>{value}</BlackCardValue>
       </UnknownCard>
     );
   } else if (high) {
     return (
-      <HighCard offset={offset} rotate={rotate} onClick={() => onClick(value)}>
+      <HighCard className={active && 'active'} offset={offset} rotate={rotate} onClick={() => onClick(value)}>
         <WhiteCardValue>{value}</WhiteCardValue>
       </HighCard>
     );
   }
 
   return ( // TODO: linter doesn't allow else-if after return...that's annoying
-    <Card offset={offset} rotate={rotate} onClick={() => onClick(value)}>
+    <Card className={active && 'active'} offset={offset} rotate={rotate} onClick={() => onClick(value)}>
       <WhiteCardValue>{value}</WhiteCardValue>
     </Card>
   );
 };
 
 PokerCard.propTypes = {
+  active: PropTypes.bool.isRequired,
   high: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,
   numCards: PropTypes.number.isRequired,

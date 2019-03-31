@@ -3,14 +3,13 @@ import cookie from 'cookie';
 import sanitizeHtml from 'sanitize-html';
 import Board from '../models/board';
 import User from '../models/user';
+import Task from '../models/task';
 
 export function getBoards(req, res) {
-  Board.find().sort('-dateAdded').exec((err, boards) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.json({ boards });
-  });
+  Board.find()
+    .sort('-dateAdded')
+    .then(boards => res.json({ boards }))
+    .catch(err => res.status(500).send(err));
 }
 
 export function addBoard(req, res) {
@@ -44,6 +43,11 @@ export function addBoard(req, res) {
       newBoard.title = sanitizeHtml(newBoard.title);
       newBoard.slug = slug(newBoard.title.toLowerCase(), { lowercase: true });
       newBoard.owner = user._id;
+
+      const activeTask = new Task({ board: newBoard._id });
+      activeTask.save();
+
+      newBoard.activeTask = activeTask;
       return newBoard.save();
     })
     .then(saved => res.json(saved))
@@ -83,7 +87,6 @@ export function addUserToBoard(req, res) {
       res.status(500).send(err);
     }
 
-    console.log(board.users);
     if (board.users.find(user => user._id === userId)) {
       res.send(200);
     } else {
@@ -115,7 +118,7 @@ export function changeActiveTask2(req, res) {
     }
     board.save({
       title: sanitizeHtml(title),
-      descreption: sanitizeHtml(description),
+      description: sanitizeHtml(description),
     });
     res.json({ task: board.task });
   });

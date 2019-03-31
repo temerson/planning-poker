@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export const VoteSchema = new Schema({
+const VoteSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -12,7 +12,7 @@ export const VoteSchema = new Schema({
 });
 
 const TaskSchema = new Schema({
-  title: { type: String, required: true },
+  title: String,
   description: String,
   board: {
     type: Schema.Types.ObjectId,
@@ -23,4 +23,5 @@ const TaskSchema = new Schema({
   dateAdded: { type: Date, default: Date.now, required: true },
 });
 
+export const Vote = mongoose.model('Vote', VoteSchema);
 export default mongoose.model('Task', TaskSchema);

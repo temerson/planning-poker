@@ -2,6 +2,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from './modules/App/App';
+import Boards from './modules/Board/pages/Boards';
 
 // require.ensure polyfill for node
 if (typeof require.ensure !== 'function') {
@@ -34,28 +35,29 @@ export default (
       }}
     />
     <Route
-      path="/new-board"
+      path="new-board"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
           cb(null, require('./modules/Board/pages/RegisterBoard').default);
         });
       }}
     />
-    <Route
-      path="/boards"
-      getComponent={(nextState, cb) => {
-        require.ensure([], require => {
-          cb(null, require('./modules/Board/pages/BoardList').default);
-        });
-      }}
-    />
-    <Route
-      path="/boards/:boardSlug"
-      getComponent={(nextState, cb) => {
-        require.ensure([], require => {
-          cb(null, require('./modules/Board/pages/Board').default);
-        });
-      }}
-    />
+    <Route path="/boards" component={Boards}>
+      <IndexRoute
+        getComponent={(nextState, cb) => {
+          require.ensure([], require => {
+            cb(null, require('./modules/Board/pages/BoardList').default);
+          });
+        }}
+      />
+      <Route
+        path=":boardSlug"
+        getComponent={(nextState, cb) => {
+          require.ensure([], require => {
+            cb(null, require('./modules/Board/pages/Board').default);
+          });
+        }}
+      />
+    </Route>
   </Route>
 );

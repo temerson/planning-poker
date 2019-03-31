@@ -2,6 +2,7 @@ import callApi from '../../util/apiCaller';
 
 export const ADD_BOARD = 'ADD_BOARD';
 export const ADD_BOARDS = 'ADD_BOARDS';
+export const SET_ACTIVE_TASK = 'SET_ACTIVE_TASK';
 
 export function addBoard(board) {
   return {
@@ -36,13 +37,6 @@ export function getBoardsRequest() {
   };
 }
 
-export function getBoardRequest(slug) {
-  return (dispatch) => {
-    return callApi(`boards/${slug}`, 'get')
-      .then(res => dispatch(addBoard(res)));
-  };
-}
-
 export function addUserToBoardRequest(userId, slug) {
   return () => callApi(`boards/${slug}/users`, 'post', { userId });
 }
@@ -51,6 +45,28 @@ export function registerUserRequest(username, callback) {
   return () => callApi('users', 'post', { username }).then(callback);
 }
 
-export function taskChanged(boardSlug, title, description) {
-  return () => callApi(`boards/${boardSlug}/tasks`, 'put', { title, description });
+export function taskChanged(taskId, title, description) {
+  return () => callApi(`tasks/${taskId}`, 'put', { title, description });
+}
+
+function setActiveTask(task) {
+  return {
+    type: SET_ACTIVE_TASK,
+    task,
+  };
+}
+
+export function getActiveTaskRequest(taskId) {
+  return dispatch => callApi(`tasks/${taskId}`, 'get')
+    .then(res => dispatch(setActiveTask(res)));
+}
+
+export function castVote(taskId, value) {
+  return dispatch => callApi(`tasks/${taskId}/vote`, 'post', { value })
+    .then(res => dispatch(setActiveTask(res)));
+}
+
+export function removeVote(taskId, voteId) {
+  return dispatch => callApi(`tasks/${taskId}/vote/${voteId}`, 'delete')
+    .then(res => dispatch(setActiveTask(res)));
 }

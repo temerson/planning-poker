@@ -26,6 +26,10 @@ const FullHeight = styled.div`
 `;
 
 export class App extends Component {
+  static propTypes = {
+    children: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = { isMounted: false };
@@ -65,9 +69,5 @@ export class App extends Component {
     );
   }
 }
-
-App.propTypes = {
-  children: PropTypes.object.isRequired,
-};
 
 export default App;

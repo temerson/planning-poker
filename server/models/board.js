@@ -16,6 +16,7 @@ const BoardSchema = new Schema({
   activeTask: {
     type: Schema.Types.ObjectId,
     ref: 'Task',
+    required: true,
   },
   slug: { type: String, required: true, unique: true },
   dateAdded: { type: Date, default: Date.now, required: true },

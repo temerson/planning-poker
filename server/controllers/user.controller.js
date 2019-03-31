@@ -12,7 +12,6 @@ export function getUser(req, res) {
   User.findById(userId).exec()
     .then(user => res.json(user))
     .catch(err => {
-      console.log(err);
       res.status(404).send(err);
     });
 }
