@@ -13,33 +13,16 @@ const Wrapper = styled.div`
   > textarea {
     margin-left: 0;
     margin-right: 0;
-    max-width: 600px;
-    width: 600px;
+    max-width: 100%;
+    width: 100%;
   }
+  > textarea {
+    height: 75%;
+  }
+`;
 
-  @media screen and (max-width: 650px) {
-    > input,
-    > textArea {
-      max-width: 500px;
-      width: 500px;
-    }
-  }
-
-  @media screen and (max-width: 550px) {
-    > input,
-    > textArea {
-      max-width: 350px;
-      width: 350px;
-    }
-  }
-
-  @media screen and (max-width: 400px) {
-    > input,
-    > textArea {
-      max-width: 300px;
-      width: 300px;
-    }
-  }
+const Content = styled.div`
+  white-space: pre-wrap;
 `;
 
 class BoardTasks extends React.Component {
@@ -101,7 +84,7 @@ class BoardTasks extends React.Component {
           <React.Fragment>
             <h2>Task: {this.state.title || ''}</h2>
             <h4>Description:</h4>
-            <pre>{this.state.description || ''}</pre>
+            <Content>{this.state.description || ''}</Content>
           </React.Fragment>
         )}
       </Wrapper>

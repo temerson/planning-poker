@@ -11,6 +11,7 @@ import {
   addUserToBoardRequest,
   getActiveTaskRequest,
   getBoardsRequest,
+  setActiveTask,
   removeUserFromBoardRequest,
 } from '../actions';
 import { getActiveTask, getBoard } from '../reducers';
@@ -21,12 +22,14 @@ const Wrapper = styled.div`
   height: 100%;
 
   grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   grid-template-areas: "actions actions"
     "members task"
     "cards cards";
 
   @media screen and (max-width: 650px) {
     grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto;
     grid-template-areas: "actions"
       "task"
       "cards"
@@ -70,13 +73,17 @@ class Board extends React.Component {
     if (board && userId) {
       dispatch(removeUserFromBoardRequest(board._id, userId));
     }
-    this.boardTimer = null;
-    this.taskTimer = null;
+
+    dispatch(setActiveTask({}));
+    clearInterval(this.state.boardTimer);
+    clearInterval(this.state.taskTimer);
   }
 
   setTimers = (board) => {
-    this.taskTimer = setInterval(() => this.fetchTask(board.activeTask), 1000);
-    this.boardTimer = setInterval(() => this.fetchBoard(board), 5000);
+    this.setState({
+      taskTimer: setInterval(() => this.fetchTask(board.activeTask), 1000),
+      boardTimer: setInterval(() => this.fetchBoard(board), 5000),
+    });
   }
 
   fetchBoard = () => {

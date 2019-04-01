@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   grid-area: members;
+  margin-right: 2rem;
 
   @media screen and (max-width: 650px) {
     display: none;

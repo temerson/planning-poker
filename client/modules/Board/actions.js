@@ -26,7 +26,7 @@ export function updateBoard(board) {
   };
 }
 
-function setActiveTask(task) {
+export function setActiveTask(task) {
   return {
     type: SET_ACTIVE_TASK,
     task,

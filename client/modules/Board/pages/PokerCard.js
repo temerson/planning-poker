@@ -8,6 +8,7 @@ const Card = styled.div`
   box-shadow: 2px 2px 2px #3c3c3c;
   width: 6rem;
   height: 8rem;
+  user-select: none;
 
   margin: 0.1rem;
   border-radius: 3px;
