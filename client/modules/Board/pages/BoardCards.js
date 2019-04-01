@@ -16,6 +16,15 @@ const Wrapper = styled.div`
   padding-top: 1rem;
   height: 10rem;
   margin: 0 auto;
+
+  @media only screen and (max-width: 550px) {
+    margin: 0 12rem;
+  }
+
+  @media only screen and (max-width: 400px) {
+    margin: 0 9rem;
+  }
+
 `;
 
 class BoardCards extends React.Component {

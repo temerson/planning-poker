@@ -20,22 +20,17 @@ const Wrapper = styled.div`
   display: grid;
   height: 100%;
 
-  grid-template-areas: "actions actions actions actions"
-    "members status task history"
-    "cards cards cards cards";
-
-  @media screen and (max-width: 850px) {
-    grid-template-areas: "actions actions"
-      "members status"
-      "task history"
-      "cards cards";
-  }
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: "actions actions"
+    "members task"
+    "cards cards";
 
   @media screen and (max-width: 650px) {
+    grid-template-rows: auto 1fr auto;
     grid-template-areas: "actions"
       "task"
-      "cards";
-    /* TODO: hide other components */
+      "cards"
+      "members";
   }
 `;
 
@@ -111,24 +106,24 @@ class Board extends React.Component {
     return (
       <Wrapper>
         <BoardActions
-          style="grid-area: actions"
+          style={{ gridArea: 'actions' }}
           isOwner={isOwner}
           onReveal={this.toggleShowVotes}
           showVotes={showVotes}
         />
         <BoardMembers
-          style="grid-area: members"
+          style={{ gridArea: 'members' }}
           task={activeTask}
           members={board.users}
           showVotes={showVotes}
         />
         <BoardTask
-          style="grid-area: task"
+          style={{ gridArea: 'task' }}
           task={activeTask}
           isOwner={isOwner}
         />
         <BoardCards
-          style="grid-area: cards"
+          style={{ gridArea: 'cards' }}
           task={activeTask}
         />
       </Wrapper>

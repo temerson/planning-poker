@@ -21,7 +21,15 @@ const Card = styled.div`
   }
 
   @media only screen and (max-width: 650px) {
+    left: calc(${props => props.offset} * 2.5rem);
+  }
+
+  @media only screen and (max-width: 550px) {
     left: calc(${props => props.offset} * 2rem);
+  }
+
+  @media only screen and (max-width: 400px) {
+    left: calc(${props => props.offset} * 1.5rem);
   }
 
   &.active,
@@ -30,11 +38,17 @@ const Card = styled.div`
     transform: translate(0, -1rem);
     transition: ease 0.2s;
   }
+
+  &.active {
+    transform: translate(0, -2rem);
+  }
 `;
+
 const HighCard = styled(Card)`
   background-color: #da4c00;
   border: 2px solid #8f3802;
 `;
+
 const UnknownCard = styled(Card)`
   background-color: #dab900;
   border: 2px solid #8f7f02;
@@ -52,6 +66,7 @@ const WhiteCardValue = styled.h1`
   padding-left: 0.2rem;
   color: white;
 `;
+
 const BlackCardValue = styled(WhiteCardValue)`
   color: black;
 `;

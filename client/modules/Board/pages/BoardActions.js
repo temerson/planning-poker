@@ -4,13 +4,14 @@ import styled from 'styled-components';
 import { Button } from '../../../components';
 
 const Wrapper = styled.div`
+  grid-area: actions;
   >* {
     margin: .5rem;
   }
 `;
 
 const BoardActions = ({ isOwner, onReveal, showVotes }) => (
-  <Wrapper style={{ gridArea: 'actions' }}>
+  <Wrapper>
     {isOwner && <Button onClick={onReveal}>{showVotes ? 'Hide' : 'Reveal'} Votes</Button>}
     {isOwner && <Button>Delete Board</Button>}
   </Wrapper>
