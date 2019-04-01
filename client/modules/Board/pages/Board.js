@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import BoardActions from './BoardActions';
 import BoardCards from './BoardCards';
-import BoardHistory from './BoardHistory';
 import BoardMembers from './BoardMembers';
-import BoardStatus from './BoardStatus';
 import BoardTask from './BoardTask';
 import RegisterUser from './RegisterUser';
 import {
@@ -50,6 +48,10 @@ class Board extends React.Component {
     userId: PropTypes.string,
   };
 
+  state = {
+    showVotes: false,
+  };
+
   componentDidMount() {
     const { board, dispatch, userId } = this.props;
     if (board && userId) {
@@ -78,12 +80,12 @@ class Board extends React.Component {
   }
 
   setTimers = (board) => {
-    this.taskTimer = setInterval(() => this.fetchTask(board.activeTask), 5000);
+    this.taskTimer = setInterval(() => this.fetchTask(board.activeTask), 1000);
     this.boardTimer = setInterval(() => this.fetchBoard(board), 5000);
   }
 
   fetchBoard = () => {
-    // currently this is how we get updated member lists, but it's super inefficient
+    // TODO: currently this is how we get updated member lists, but it's super inefficient
     this.props.dispatch(getBoardsRequest());
   }
 
@@ -91,9 +93,11 @@ class Board extends React.Component {
     this.props.dispatch(getActiveTaskRequest(task));
   }
 
+  toggleShowVotes = () => this.setState({ showVotes: !this.state.showVotes });
 
   render() {
     const { activeTask, board, userId } = this.props;
+    const { showVotes } = this.state;
 
     if (!board) return null;
 
@@ -103,14 +107,30 @@ class Board extends React.Component {
       );
     }
 
+    const isOwner = userId === board.owner;
     return (
       <Wrapper>
-        <BoardActions style="grid-area: actions" />
-        <BoardMembers style="grid-area: members" task={activeTask} members={board.users} />
-        <BoardStatus style="grid-area: status" board={board} />
-        <BoardTask style="grid-area: task" task={activeTask} />
-        <BoardHistory style="grid-area: history" />
-        <BoardCards style="grid-area: cards" task={activeTask} />
+        <BoardActions
+          style="grid-area: actions"
+          isOwner={isOwner}
+          onReveal={this.toggleShowVotes}
+          showVotes={showVotes}
+        />
+        <BoardMembers
+          style="grid-area: members"
+          task={activeTask}
+          members={board.users}
+          showVotes={showVotes}
+        />
+        <BoardTask
+          style="grid-area: task"
+          task={activeTask}
+          isOwner={isOwner}
+        />
+        <BoardCards
+          style="grid-area: cards"
+          task={activeTask}
+        />
       </Wrapper>
     );
   }

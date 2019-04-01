@@ -36,11 +36,7 @@ class RegisterBoard extends React.Component {
     }
 
     dispatch(addBoardRequest(boardName, username, userId, res => {
-      if (res.ok) {
-        router.push(`boards/${res.slug}`);
-      } else {
-        this.setState({ error: res.message });
-      }
+      router.push(`boards/${res.slug}`);
     }));
   }
 

@@ -90,11 +90,14 @@ export function addUserToBoard(req, res) {
       if (board.users.find(user => user.equals(userId))) {
         res.status(200).send(board);
       } else {
-        const newBoard = new Board(board);
-        newBoard.users = [...board.users, userId];
-        newBoard.save()
-          .then(saved => res.json(saved))
-          .catch(err => res.status(500).send(err));
+        User.findById(userId)
+          .then(user => {
+            const newBoard = new Board(board);
+            newBoard.users = [...board.users, user];
+            newBoard.save()
+              .then(saved => res.json(saved))
+              .catch(err => res.status(500).send(err));
+          });
       }
     })
     .catch(err => res.status(500).send(err));
@@ -112,7 +115,7 @@ export function removeUserFromBoard(req, res) {
     .populate('users')
     .then(board => {
       const newBoard = new Board(board);
-      newBoard.users = board.users.filter(user => !user.equals(userId));
+      newBoard.users = board.users.filter(user => !user._id.equals(userId));
       newBoard.save()
         .then(saved => res.json(saved))
         .catch(err => res.status(500).send(err));
