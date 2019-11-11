@@ -1,9 +1,9 @@
-import app from './app';
-import serverConfig from './config';
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 5000;
 
-// start app
-app.listen(serverConfig.port, (error) => {
-  if (!error) {
-    console.log(`Planning-Poker is running on port ${serverConfig.port}.`); // eslint-disable-line
-  }
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+app.get('/express_backend', (req, res) => {
+  res.send({ express: 'TADA' });
 });
