@@ -67,7 +67,7 @@ class Header extends React.Component {
     return (
       <Wrapper>
         <Title>
-          <Link to="/"><span id="siteTitle">Planning Poker</span></Link>
+          <Link to="/who-dis"><span id="siteTitle">Planning Poker</span></Link>
         </Title>
 
         {username && <Welcome>Welcome {username}!</Welcome>}

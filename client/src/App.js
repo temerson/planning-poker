@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { getUsername } from './util/userState';
 import Routes from './Routes';
 import './main.css';
 
 function requireUsername(nextState, replace) {
-  const username = window.sessionStorage.getItem('username');
+  const username = getUsername();
   if (!username) {
     replace({
       pathname: '/who-dis',

@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
-import { Button, Input, Title } from '../../components';
+import { withRouter } from 'react-router';
+import { getUsername, saveUsername } from '../../util/userState';
+import { Button, Input, Title, Wrapper } from '../../components';
 
-const WhoDis = () => {
-  const [username, setUsername] = useState();
+const WhoDis = ({ router }) => {
+  const [username, setUsername] = useState(getUsername() || '');
+
+  const register = () => {
+    saveUsername(username);
+    router.push('/boards');
+  }
+
   return (
-    <>
+    <Wrapper>
       <Title>Who dis?</Title>
       <Input
+        required
+        autoFocus
+        placeholder="Hi, I'm..."
         value={username}
-        name="username"
         onChange={e => setUsername(e.target.value)}
       />
       <Button
-        onClick={() => {}}
+        onClick={register}
         hidden={!username}
       >
-        I'm ${username}
+        Let's Go!
       </Button>
-    </>
+    </Wrapper>
   );
 };
 
-export default WhoDis;
+export default withRouter(WhoDis);
