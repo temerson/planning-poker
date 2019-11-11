@@ -24,6 +24,11 @@ const Wrapper = styled.div`
 const Title = styled.h1`
   font-weight: 500;
   font-size: 42px;
+  width: 100%;
+
+  .logout {
+    float: right;
+  }
 
   > a {
     text-decoration: none;
@@ -67,7 +72,10 @@ class Header extends React.Component {
     return (
       <Wrapper>
         <Title>
-          <Link to="/who-dis"><span id="siteTitle">Planning Poker</span></Link>
+          <Link to="/">Planning Poker</Link>
+          <Link to="/who-dis" className="logout">
+            <i className="material-icons">exit_to_app</i>
+          </Link>
         </Title>
 
         {username && <Welcome>Welcome {username}!</Welcome>}
