@@ -17,9 +17,19 @@ wss.on('connection', ws => {
     ws.isAlive = true;
   });
 
-  ws.on('message', message => {
-    console.log(`received: ${message}`);
-    ws.send(`Hello, you sent: ${message}`);
+  ws.on('message', messageStr => {
+    const message = JSON.parse(messageStr);
+    switch (message.type) {
+      case 'user_join':
+        wss.clients.forEach(ws => ws.send(`User ${message.username} joined`))
+        break;
+      case 'set_vote':
+        wss.clients.forEach(ws => ws.send(`User ${message.username} voted ${message.vote}`));
+        break;
+      default:
+        console.log(`Unknown message type ${message.type}`);
+        break;
+    }
   });
 
   ws.send('Hi there, I am a websocket server');

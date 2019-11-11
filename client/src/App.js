@@ -13,6 +13,7 @@ class App extends React.Component {
   componentDidMount() {
     const { websocket } = this.state;
     websocket.onopen = () => {
+      websocket.send(JSON.stringify({ type: 'user_join', username: 'tristan' }));
       console.log('connected');
     }
     websocket.onmessage = event => {
