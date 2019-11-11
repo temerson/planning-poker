@@ -56,30 +56,24 @@ export function addBoard(req, res) {
 }
 
 export function deleteBoard(req, res) {
-  Board.findByIdAndDelete(req.params.boardId).exec(err => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.status(200).end();
-  });
+  Board.findByIdAndDelete(req.params.boardId)
+    .then(() => res.status(200).end())
+    .catch(err => res.status(500).send(err));
 }
 
 // ---------------------- users on a given board -------------------------------
 
 export function getUsersOnBoard(req, res) {
-  Board.findOne({ slug: req.params.boardSlug }).exec((err, board) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.json({
+  Board.findById(req.params.boardId)
+    .then(board => res.json({
       users: board.users.sort((a, b) => a.name.localeCompare(b.name)),
-    });
-  });
+    }))
+    .catch(err => res.status(500).send(err));
 }
 
 export function addUserToBoard(req, res) {
   const cookies = cookie.parse(req.headers.cookie || '');
-  const userId = cookies.userId;
+  const { userId } = cookies;
   if (!userId) {
     res.status(403).end();
   }
@@ -100,7 +94,10 @@ export function addUserToBoard(req, res) {
           });
       }
     })
-    .catch(err => res.status(500).send(err));
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
 }
 
 export function removeUserFromBoard(req, res) {

@@ -34,7 +34,7 @@ export function registerUser(req, res) {
       res.status(500).send(err);
     } else {
       res.setHeader('Set-Cookie', cookie.serialize('userId', saved._id, {
-        maxAge: 60 * 60 * 24, // 1 day
+        maxAge: 60 * 60 * 24 * 365, // 1 year
         path: '/',
       }));
       res.send(saved);
