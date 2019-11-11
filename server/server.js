@@ -11,6 +11,12 @@ server.listen(config.port, () => console.log(`Listening on port ${config.port}`)
 const wss = new webSocket.Server({ server });
 
 wss.on('connection', ws => {
+
+  ws.isAlive = true;
+  ws.on('pong', () => {
+    ws.isAlive = true;
+  });
+
   ws.on('message', message => {
     console.log(`received: ${message}`);
     ws.send(`Hello, you sent: ${message}`);
@@ -18,6 +24,18 @@ wss.on('connection', ws => {
 
   ws.send('Hi there, I am a websocket server');
 });
+
+// check if the clients are still connected every 10 seconds
+setInterval(() => {
+  wss.clients.forEach(ws => {
+    if (!ws.isAlive) {
+      return ws.terminate();
+    }
+
+    ws.isAlive = false;
+    ws.ping(null, false, true);
+  });
+}, 10000);
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise;
