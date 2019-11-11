@@ -61,7 +61,7 @@ class Board extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { board, dispatch } = this.props;
-    if (!board && board !== nextProps.board) {
+    if (!board && nextProps.board) {
       dispatch(addUserToBoardRequest(nextProps.board._id));
       this.fetchTask(nextProps.board.activeTask);
       this.setTimers(nextProps.board);

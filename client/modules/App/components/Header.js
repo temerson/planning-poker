@@ -55,7 +55,7 @@ class Header extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { cookies, dispatch, username } = nextProps;
-    const userId = cookies.userId;
+    const { userId } = cookies;
 
     if (userId && !username) {
       dispatch(getUserRequest(userId));
