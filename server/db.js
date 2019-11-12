@@ -3,7 +3,7 @@ import slug from 'limax';
 let nextBoardId = 2;
 
 export const store = {
-  boards: {1: {
+  boards: {'my-board-1': {
     slug: 'my-board-1',
     title: 'My Board',
     task: {
@@ -25,24 +25,25 @@ export const store = {
 
 export const addBoard = board => {
   const boardId = nextBoardId++;
+  const slug = slug(board.title.toLowerCase()) + '-' + boardId;
   const newBoard = {
     id: boardId,
-    slug: slug(board.title.toLowerCase()) + '-' + boardId,
+    slug,
     task: {},
     users: [],
     ...board,
   };
-  store.boards[boardId] = newBoard;
+  store.boards[slug] = newBoard;
   return newBoard;
 }
 
-export const setVote = (boardId, username, vote) => {
-  store.boards[boardId].users
+export const setVote = (boardSlug, username, vote) => {
+  store.boards[boardSlug].users
     .find(user => user.username === username).vote = vote;
 }
 
-export const resetBoard = boardId => {
-  const board = store.boards[boardId];
+export const resetBoard = boardSlug => {
+  const board = store.boards[boardSlug];
   board.task = {};
   board.users = board.users.map(user => ({ username: user.username }));
 }

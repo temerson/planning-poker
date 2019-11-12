@@ -3,12 +3,25 @@ import webSocket from 'ws';
 import http from 'http';
 import config from './config';
 import routes from './routes';
+import { store } from './db';
 
 const app = express();
 const server = http.createServer(app);
 server.listen(config.port, () => console.log(`Listening on port ${config.port}`));
 
 const wss = new webSocket.Server({ server });
+
+const updateClients = boardSlug => {
+  wss.clients.forEach(ws => {
+    if (ws.activeBoard === boardSlug) {
+      const message = {
+        type: 'board_change',
+        board: store.boards[boardSlug],
+      };
+      ws.send(JSON.stringify(message));
+    }
+  });
+};
 
 wss.on('connection', ws => {
 
@@ -19,12 +32,19 @@ wss.on('connection', ws => {
 
   ws.on('message', messageStr => {
     const message = JSON.parse(messageStr);
+    console.log(message);
     switch (message.type) {
       case 'user_join':
-        wss.clients.forEach(ws => ws.send(`User ${message.username} joined`))
+        ws.activeBoard = message.boardSlug;
+        updateClients(message.boardSlug);
         break;
-      case 'set_vote':
-        wss.clients.forEach(ws => ws.send(`User ${message.username} voted ${message.vote}`));
+      case 'user_leave':
+        ws.activeBoard = undefined;
+        updateClients(message.boardSlug);
+        break;
+      case 'user_vote':
+      case 'board_change':
+        updateClients(message.boardSlug);
         break;
       default:
         console.log(`Unknown message type ${message.type}`);
