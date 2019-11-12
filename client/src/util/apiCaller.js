@@ -1,8 +1,4 @@
-import fetch from 'isomorphic-fetch';
-
-export const API_URL = (typeof window === 'undefined' || process.env.NODE_ENV === 'test')
-  ? process.env.BASE_URL || `http://localhost:${process.env.PORT || 5000}/api`
-  : '/api';
+export const API_URL = `http://localhost:${process.env.PORT || 5000}/api`;
 
 export default function callApi(endpoint, method = 'get', body) {
   return fetch(`${API_URL}/${endpoint}`, {
