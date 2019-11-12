@@ -27,7 +27,7 @@ export const addBoard = board => {
   const boardId = nextBoardId++;
   const newBoard = {
     id: boardId,
-    slug: slug(req.body.title.toLowerCase()),
+    slug: slug(board.title.toLowerCase()),
     task: {},
     users: [],
     ...board,
