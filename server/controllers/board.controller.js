@@ -5,8 +5,12 @@ export function getBoards(req, res) {
 }
 
 export function addBoard(req, res) {
-  const board = db.addBoard(req.body);
-  res.status(201).json(board)
+  if (!req.body || req.body.length === 0) {
+    res.status(500).send('Request must include a title');
+  } else {
+    const board = db.addBoard(req.body);
+    res.status(201).json(board)
+  }
 }
 
 export function deleteBoard(req, res) {

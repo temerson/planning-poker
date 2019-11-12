@@ -4,7 +4,7 @@ let nextBoardId = 2;
 
 export const store = {
   boards: {1: {
-    slug: 'my-board',
+    slug: 'my-board-1',
     title: 'My Board',
     task: {
       title: 'Working on some stuff',
@@ -27,7 +27,7 @@ export const addBoard = board => {
   const boardId = nextBoardId++;
   const newBoard = {
     id: boardId,
-    slug: slug(board.title.toLowerCase()),
+    slug: slug(board.title.toLowerCase()) + '-' + boardId,
     task: {},
     users: [],
     ...board,
