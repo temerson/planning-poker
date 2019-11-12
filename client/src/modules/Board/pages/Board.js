@@ -1,20 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+import useWebsocket from '../../../contexts/useWebsocket';
+import useUser from '../../../contexts/useUser';
 import BoardActions from './BoardActions';
 import BoardCards from './BoardCards';
 import BoardMembers from './BoardMembers';
 import BoardTask from './BoardTask';
-import {
-  addUserToBoardRequest,
-  getActiveTaskRequest,
-  getBoardsRequest,
-  setActiveTask,
-  removeUserFromBoardRequest,
-} from '../actions';
-import { getActiveTask, getBoard } from '../reducers';
 
 const Wrapper = styled.div`
   padding: 0 2rem;
@@ -37,108 +28,44 @@ const Wrapper = styled.div`
   }
 `;
 
-class Board extends React.Component {
-  static propTypes = {
-    activeTask: PropTypes.object,
-    board: PropTypes.object,
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    router: PropTypes.object.isRequired,
-    userId: PropTypes.string,
-  };
+const Board = () => {
+  const websocket = useWebsocket();
+  const user = useUser();
+  const [ board, setBoard ] = useState();
+  const [ showNotes, setShowVotes ] = useState(board && board.showVotes);
 
-  state = {
-    showVotes: false,
-  };
+  const resetBoard = () => {};
+  // toggleShowVotes = () => this.setState({ showVotes: !this.state.showVotes });
 
-  componentDidMount() {
-    const { board, dispatch, userId } = this.props;
-    if (board && userId) {
-      dispatch(addUserToBoardRequest(board._id));
-      this.fetchTask(board.activeTask);
-      this.setTimers(board);
-    }
-  }
+  if (!board) return null;
 
-  componentWillReceiveProps(nextProps) {
-    const { board, dispatch } = this.props;
-    if (!board && nextProps.board) {
-      dispatch(addUserToBoardRequest(nextProps.board._id));
-      this.fetchTask(nextProps.board.activeTask);
-      this.setTimers(nextProps.board);
-    }
-  }
-
-  componentWillUnmount() {
-    const { board, dispatch, userId } = this.props;
-    if (board && userId) {
-      dispatch(removeUserFromBoardRequest(board._id, userId));
-    }
-
-    dispatch(setActiveTask({}));
-    clearInterval(this.state.boardTimer);
-    clearInterval(this.state.taskTimer);
-  }
-
-  setTimers = (board) => {
-    this.setState({
-      taskTimer: setInterval(() => this.fetchTask(board.activeTask), 1000),
-      boardTimer: setInterval(() => this.fetchBoard(board), 5000),
-    });
-  }
-
-  fetchBoard = () => {
-    // TODO: currently this is how we get updated member lists, but it's super inefficient
-    this.props.dispatch(getBoardsRequest());
-  }
-
-  fetchTask = (task) => {
-    this.props.dispatch(getActiveTaskRequest(task));
-  }
-
-  toggleShowVotes = () => this.setState({ showVotes: !this.state.showVotes });
-
-  render() {
-    const { activeTask, board, router, userId } = this.props;
-    const { showVotes } = this.state;
-
-    if (!board) return null;
-
-    if (!userId) {
-      router.push('/');
-    }
-
-    const isOwner = userId === board.owner;
-    return (
-      <Wrapper>
-        <BoardActions
-          style={{ gridArea: 'actions' }}
-          isOwner={isOwner}
-          onReveal={this.toggleShowVotes}
-          showVotes={showVotes}
-        />
-        <BoardMembers
-          style={{ gridArea: 'members' }}
-          task={activeTask}
-          members={board.users}
-          showVotes={showVotes}
-        />
-        <BoardTask
-          style={{ gridArea: 'task' }}
-          task={activeTask}
-          isOwner={isOwner}
-        />
-        <BoardCards
-          style={{ gridArea: 'cards' }}
-          task={activeTask}
-        />
-      </Wrapper>
-    );
-  }
+  const isOwner = user.getUsername() === board.owner;
+  return (
+    <Wrapper>
+      <BoardActions
+        style={{ gridArea: 'actions' }}
+        isOwner={isOwner}
+        onReveal={setShowVotes}
+        onReset={resetBoard}
+        showVotes={showNotes}
+      />
+      <BoardMembers
+        style={{ gridArea: 'members' }}
+        task={board.task}
+        members={board.users}
+        showVotes={showNotes}
+      />
+      <BoardTask
+        style={{ gridArea: 'task' }}
+        task={board.task}
+        isOwner={isOwner}
+      />
+      <BoardCards
+        style={{ gridArea: 'cards' }}
+        task={board.task}
+      />
+    </Wrapper>
+  );
 }
 
-export default connect((state, props) => ({
-  activeTask: getActiveTask(state),
-  board: getBoard(state, props.params.boardSlug),
-  userId: state.app.user._id,
-}))(withRouter(Board));
+export default Board;

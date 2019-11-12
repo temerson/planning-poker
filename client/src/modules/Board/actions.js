@@ -35,22 +35,16 @@ export function setActiveTask(task) {
 
 // Async actions -----------------------------------------------
 
-export function addBoardRequest(title, username, userId, callback) {
+export function addBoardRequest(title, callback) {
   return () => {
-    return callApi('boards', 'post', {
-      board: {
-        title,
-        owner: userId,
-      },
-      username,
-    }).then(callback);
+    return callApi('boards/', 'post', { title }).then(callback);
   };
 }
 
 export function getBoardsRequest() {
   return (dispatch) => {
-    return callApi('boards', 'get')
-      .then(res => dispatch(addBoards(res.boards)));
+    return callApi('boards/', 'get')
+      .then(res => dispatch(addBoards(res)));
   };
 }
 

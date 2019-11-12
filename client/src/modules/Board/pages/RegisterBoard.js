@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button, Error, Input, Title, Wrapper } from '../../../components';
-import { addBoardRequest } from '../actions';
+import { addBoard, addBoardRequest } from '../actions';
 
 class RegisterBoard extends React.Component {
   static propTypes = {
@@ -19,8 +19,6 @@ class RegisterBoard extends React.Component {
   handleButtonClick = () => {
     const { dispatch, router } = this.props;
 
-    const usernameField = document.querySelector('#username');
-    const username = usernameField && usernameField.value;
     const boardName = document.querySelector('#name').value;
 
     if (!boardName) {
@@ -28,8 +26,9 @@ class RegisterBoard extends React.Component {
       return;
     }
 
-    dispatch(addBoardRequest(boardName, username, res => {
-      router.push(`boards/${res.slug}`);
+    dispatch(addBoardRequest(boardName, res => {
+      dispatch(addBoard(res));
+      router.push(`/boards/${res.slug}`);
     }));
   }
 

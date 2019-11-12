@@ -17,15 +17,14 @@ const UserWithVote = styled(UserWithoutVote)`
   font-weight: bold;
 `;
 
-const BoardMembers = ({ members, task, showVotes }) => (
+const BoardMembers = ({ members = [], task, showVotes }) => (
   <Wrapper>
     <h3>Board Members</h3>
     {members
       .sort((a, b) => a.username.localeCompare(b.username))
       .map((member, index) => {
-        const userVote = task.votes && task.votes.find(vote => vote.user._id === member._id);
-        return userVote
-          ? <UserWithVote key={index}>{member.username}{showVotes && ` (${userVote.value})`}</UserWithVote>
+        return member.vote
+          ? <UserWithVote key={index}>{member.username}{showVotes && ` (${member.vote})`}</UserWithVote>
           : <UserWithoutVote key={index}>{member.username}</UserWithoutVote>;
       })
     }
@@ -33,7 +32,7 @@ const BoardMembers = ({ members, task, showVotes }) => (
 );
 
 BoardMembers.propTypes = {
-  members: PropTypes.array.isRequired,
+  members: PropTypes.array,
   task: PropTypes.object.isRequired,
   showVotes: PropTypes.bool.isRequired,
 };

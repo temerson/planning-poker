@@ -40,12 +40,6 @@ class BoardTasks extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.task !== this.props.task && !this.state.editing) {
-      this.setState({ ...nextProps.task });
-    }
-  }
-
   handleChange = (e, field) => {
     this.setState(
       { [field]: e.target.value, editing: true },

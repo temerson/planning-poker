@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { LinkButton, Title, Wrapper } from '../../../components';
+import { Divider, LinkButton, Title, Wrapper } from '../../../components';
 import { getBoards } from '../reducers';
 
 const BoardList = ({ boards }) => {
@@ -11,11 +11,17 @@ const BoardList = ({ boards }) => {
   return (
     <Wrapper>
       <Title>{title}</Title>
-      {hasBoards && boards.map((board, index) => (
-        <LinkButton key={index} to={`/boards/${board.slug}`}>{board.title}</LinkButton>
-      ))}
-      {!hasBoards && <LinkButton to="/boards/new-board">Start a new board</LinkButton>}
+      {hasBoards && (
+        <>
+          {boards.map((board, index) => (
+            <LinkButton key={index} to={`/boards/${board.slug}`}>{board.title}</LinkButton>
+          ))}
+          <Divider>OR</Divider>
+        </>
+      )}
+      <LinkButton to="/boards/new-board">Start a new board</LinkButton>
     </Wrapper>
+
   );
 };
 
