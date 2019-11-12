@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import { getUsername, saveUsername } from '../../util/userState';
-import { Button, Input, Title, Wrapper } from '../../components';
+import { LinkButton, Input, Title, Wrapper } from '../../components';
 
 const WhoDis = ({ router }) => {
   const [username, setUsername] = useState(getUsername() || '');
@@ -21,12 +21,12 @@ const WhoDis = ({ router }) => {
         value={username}
         onChange={e => setUsername(e.target.value)}
       />
-      <Button
+      <LinkButton
         onClick={register}
         hidden={!username}
       >
         Let's Go!
-      </Button>
+      </LinkButton>
     </Wrapper>
   );
 };

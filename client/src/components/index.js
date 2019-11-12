@@ -84,3 +84,25 @@ export const LinkButton = styled(Link)`
     background-color: #007CCD;
   }
 `;
+
+export const Divider = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding 1rem 0;
+
+  ::before,
+  ::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #3c3c3c;
+  }
+
+  ::before {
+    margin-right: 1rem;
+  }
+
+  ::after {
+    margin-left: 1rem;
+  }
+`;

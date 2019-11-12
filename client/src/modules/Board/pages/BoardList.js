@@ -14,7 +14,7 @@ const BoardList = ({ boards }) => {
       {hasBoards && boards.map((board, index) => (
         <LinkButton key={index} to={`/boards/${board.slug}`}>{board.title}</LinkButton>
       ))}
-      {!hasBoards && <LinkButton to="/new-board">Start a new board</LinkButton>}
+      {!hasBoards && <LinkButton to="/boards/new-board">Start a new board</LinkButton>}
     </Wrapper>
   );
 };
