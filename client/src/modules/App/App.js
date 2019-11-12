@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
@@ -24,7 +23,6 @@ const FullHeight = styled.div`
 export class App extends Component {
   static propTypes = {
     children: PropTypes.object,
-    dispatch: PropTypes.func.isRequired,
     router: PropTypes.object.isRequired,
   };
 
@@ -38,32 +36,30 @@ export class App extends Component {
   render() {
 
     return (
-      <div>
-        <FlexContainer>
-          <Helmet
-            title="Planning Poker"
-            titleTemplate="%s - Poker Board"
-            meta={[
-              { charset: 'utf-8' },
-              {
-                'http-equiv': 'X-UA-Compatible',
-                content: 'IE=edge',
-              },
-              {
-                name: 'viewport',
-                content: 'width=device-width, initial-scale=1',
-              },
-            ]}
-          />
-          <Header />
-          <FullHeight>
-            {this.props.children}
-          </FullHeight>
-          <Footer />
-        </FlexContainer>
-      </div>
+      <FlexContainer>
+        <Helmet
+          title="Planning Poker"
+          titleTemplate="%s - Poker Board"
+          meta={[
+            { charset: 'utf-8' },
+            {
+              'http-equiv': 'X-UA-Compatible',
+              content: 'IE=edge',
+            },
+            {
+              name: 'viewport',
+              content: 'width=device-width, initial-scale=1',
+            },
+          ]}
+        />
+        <Header />
+        <FullHeight>
+          {this.props.children}
+        </FullHeight>
+        <Footer />
+      </FlexContainer>
     );
   }
 }
 
-export default connect()(withRouter(App));
+export default withRouter(App);

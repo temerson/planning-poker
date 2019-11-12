@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
-import { getUsername, saveUsername } from '../../util/userState';
+import useUser from '../../contexts/useUser';
 import { LinkButton, Input, Title, Wrapper } from '../../components';
 
 const WhoDis = ({ router }) => {
-  const [username, setUsername] = useState(getUsername() || '');
+  const user = useUser();
+  const [username, setUsername] = useState(user.getUsername() || '');
 
   const register = () => {
-    saveUsername(username);
+    user.setUsername(username);
     router.push('/boards');
   }
 

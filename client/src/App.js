@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { getUsername } from './util/userState';
+import { UserProvider } from './contexts/UserContext';
+import { WebsocketProvider } from './contexts/WebsocketContext';
 import Routes from './Routes';
 import './main.css';
 
-function requireUsername(nextState, replace) {
-  const username = getUsername();
-  if (!username) {
+const requireUsername = (nextState, replace) => isRegistered => {
+  if (!isRegistered) {
     replace({
       pathname: '/who-dis',
       state: { nextPathname: nextState.location.pathname },
@@ -19,11 +19,15 @@ function requireUsername(nextState, replace) {
 export default function App(props) {
   return (
     <Provider store={props.store}>
-      <Routes
-        history={browserHistory}
-        onChange={(prev, next, replace) => requireUsername(next, replace)}
-        onEnter={requireUsername}
-      />
+      <UserProvider>
+        <WebsocketProvider>
+          <Routes
+            history={browserHistory}
+            onChange={(prev, next, replace) => requireUsername(next, replace)}
+            onEnter={requireUsername}
+          />
+        </WebsocketProvider>
+      </UserProvider>
     </Provider>
   );
 }
