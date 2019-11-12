@@ -1,8 +1,8 @@
-export const API_URL = `http://localhost:${process.env.PORT || 5000}/api`;
-
 export default function callApi(endpoint, method = 'get', body) {
-  return fetch(`${API_URL}/${endpoint}`, {
-    headers: { 'content-type': 'application/json' },
+  return fetch(`/api/${endpoint}`, {
+    headers: {
+      'content-type': 'application/json',
+    },
     method,
     body: JSON.stringify(body),
   })
