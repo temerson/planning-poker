@@ -1,7 +1,12 @@
 import * as db from '../db';
 
 export function getBoards(req, res) {
-  res.status(200).json(Object.values(db.store.boards));
+  const boardSummaries = Object.values(db.store.boards)
+    .map(board => ({
+      title: board.title,
+      slug: board.slug,
+    }));
+  res.status(200).json(boardSummaries);
 }
 
 export function addBoard(req, res) {

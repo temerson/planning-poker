@@ -36,6 +36,13 @@ export const addBoard = board => {
   return newBoard;
 }
 
-export const deleteBoard = boardId => {
-  delete store.boards[boardId];
+export const setVote = (boardId, username, vote) => {
+  store.boards[boardId].users
+    .find(user => user.username === username).vote = vote;
+}
+
+export const resetBoard = boardId => {
+  const board = store.boards[boardId];
+  board.task = {};
+  board.users = board.users.map(user => ({ username: user.username }));
 }
