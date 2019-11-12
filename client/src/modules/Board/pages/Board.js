@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import useWebsocket from '../../../contexts/useWebsocket';
 import useUser from '../../../contexts/useUser';
@@ -28,14 +29,31 @@ const Wrapper = styled.div`
   }
 `;
 
-const Board = () => {
+const Board = ({ params }) => {
   const websocket = useWebsocket();
   const user = useUser();
   const [ board, setBoard ] = useState();
   const [ showNotes, setShowVotes ] = useState(board && board.showVotes);
 
+  useEffect(() => {
+    if (websocket.isReady) {
+      websocket.send('user_join', {
+        username: user.getUsername(),
+        boardSlug: params.boardSlug,
+      });
+      websocket.subscribe('board_change', data => setBoard(data.board));
+    }
+
+    return () => {
+      websocket.send('user_leave', {
+        username: user.getUsername(),
+        boardSlug: params.boardSlug,
+      });
+      websocket.subscribe('board_change', () => {});
+    };
+  }, [user, websocket, websocket.isReady, params ]);
+
   const resetBoard = () => {};
-  // toggleShowVotes = () => this.setState({ showVotes: !this.state.showVotes });
 
   if (!board) return null;
 
@@ -68,4 +86,4 @@ const Board = () => {
   );
 }
 
-export default Board;
+export default withRouter(Board);
