@@ -2,6 +2,7 @@ import express from 'express';
 import webSocket from 'ws';
 import http from 'http';
 import config from './config';
+import routes from './routes';
 
 const app = express();
 const server = http.createServer(app);
@@ -46,6 +47,4 @@ setInterval(() => {
   });
 }, 10000);
 
-app.get('/express_backend', (req, res) => {
-  res.send({ express: 'TADA' });
-});
+app.use('/api', routes);
