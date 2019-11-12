@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "limax": "^2.0.0",
     "ws": "^7.2.0"
   },
   "devDependencies": {

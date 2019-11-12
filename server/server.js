@@ -47,4 +47,5 @@ setInterval(() => {
   });
 }, 10000);
 
+app.use(express.json());
 app.use('/api', routes);
