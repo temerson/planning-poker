@@ -1,18 +1,36 @@
 import webSocket from 'ws';
-import * as websocketController from './controllers/websocket.controller';
+import { handleMessage } from './controllers/websocket.controller';
+
+const configurePing = ws => {
+  ws.isAlive = true;
+  ws.on('pong', () => ws.isAlive = true);
+}
+
+const checkStillConnected = ws => {
+  if (!ws.isAlive) {
+    return ws.terminate();
+  }
+
+  ws.isAlive = false;
+  ws.ping(null, false, true);
+}
+
+const subscribeToMessages = (ws, wss) => ws.on('message', handleMessage(ws, wss));
 
 const initWebsocketServer = (server) => {
   const wss = new webSocket.Server({ server });
 
   wss.on('connection', ws => {
-    websocketController.configurePing(ws);
-    websocketController.subscribeToMessages(ws, wss);
+    configurePing(ws);
+    subscribeToMessages(ws, wss);
   });
 
   // check if the clients are still connected every 10 seconds
   setInterval(() => {
-    wss.clients.forEach(websocketController.configurePong);
+    wss.clients.forEach(checkStillConnected);
   }, 10000);
+
+  return wss;
 }
 
 export default initWebsocketServer;

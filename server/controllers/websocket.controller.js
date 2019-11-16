@@ -12,7 +12,7 @@ const publishBoardChanges = (wss, boardSlug) => {
   });
 };
 
-const handleMessage = (ws, wss) => messageStr => {
+export const handleMessage = (ws, wss) => messageStr => {
     const message = JSON.parse(messageStr);
     switch (message.type) {
       case 'user_join':
@@ -32,19 +32,3 @@ const handleMessage = (ws, wss) => messageStr => {
         break;
     }
 }
-
-export const configurePing = ws => {
-  ws.isAlive = true;
-  ws.on('pong', () => ws.isAlive = true);
-}
-
-export const configurePong = ws => {
-  if (!ws.isAlive) {
-    return ws.terminate();
-  }
-
-  ws.isAlive = false;
-  ws.ping(null, false, true);
-}
-
-export const subscribeToMessages = (ws, wss) => ws.on('message', handleMessage(ws, wss));
