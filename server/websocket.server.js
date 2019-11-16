@@ -33,4 +33,6 @@ const initWebsocketServer = (server) => {
   return wss;
 }
 
-export default initWebsocketServer;
+export default {
+  init: initWebsocketServer,
+};
