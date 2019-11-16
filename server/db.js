@@ -2,6 +2,8 @@ import slug from 'limax';
 
 let nextBoardId = 2;
 
+// This is a very crude in-memory database. It's easier to iterate on while
+// hammering out the schema than a Mongo DB would be.
 export const store = {
   boards: {'my-board-1': {
     slug: 'my-board-1',
@@ -10,16 +12,7 @@ export const store = {
       title: 'Working on some stuff',
       description: 'Do things and other stuff really good like',
     },
-    users: [{
-        username: 'Steve',
-        vote: 1,
-      }, {
-        username: 'Mark',
-        vote: 3,
-      }, {
-        username: 'Deb B',
-      },
-    ],
+    users: [],
   }},
 };
 
@@ -37,7 +30,17 @@ export const addBoard = board => {
   return newBoard;
 }
 
-export const setVote = (boardSlug, username, vote) => {
+export const addUserToBoard = (boardSlug, username) => {
+  const board = store.boards[boardSlug];
+  board.users = [ ...board.users, { username }];
+}
+
+export const removeUserFromBoard = (boardSlug, username) => {
+  const board = store.boards[boardSlug];
+  board.users = board.users.filter(user => user.username !== username);
+}
+
+export const setUserVote = (boardSlug, username, vote) => {
   store.boards[boardSlug].users
     .find(user => user.username === username).vote = vote;
 }

@@ -55,6 +55,14 @@ const Board = ({ params }) => {
 
   const resetBoard = () => {};
 
+  const setVote = (vote) => {
+    websocket.send('set_vote', {
+      username: user.getUsername(),
+      boardSlug: params.boardSlug,
+      vote,
+    });
+  };
+
   if (!board) return null;
 
   const isOwner = user.getUsername() === board.owner;
@@ -81,6 +89,7 @@ const Board = ({ params }) => {
       <BoardCards
         style={{ gridArea: 'cards' }}
         task={board.task}
+        onCardClick={setVote}
       />
     </Wrapper>
   );
