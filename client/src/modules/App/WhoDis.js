@@ -12,6 +12,12 @@ const WhoDis = ({ router }) => {
     router.push('/boards');
   }
 
+  const handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      register();
+    }
+  }
+
   return (
     <Wrapper>
       <Title>Who dis?</Title>
@@ -21,6 +27,8 @@ const WhoDis = ({ router }) => {
         placeholder="Hi, I'm..."
         value={username}
         onChange={e => setUsername(e.target.value)}
+        onKeyPress={handleKeyPress}
+        autoComplete="off"
       />
       <LinkButton
         onClick={register}

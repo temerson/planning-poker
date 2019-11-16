@@ -32,7 +32,6 @@ wss.on('connection', ws => {
 
   ws.on('message', messageStr => {
     const message = JSON.parse(messageStr);
-    console.log(message);
     switch (message.type) {
       case 'user_join':
         ws.activeBoard = message.boardSlug;

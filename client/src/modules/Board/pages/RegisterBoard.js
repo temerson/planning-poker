@@ -16,7 +16,7 @@ class RegisterBoard extends React.Component {
     this.state = {};
   }
 
-  handleButtonClick = () => {
+  _submitForm = () => {
     const { dispatch, router } = this.props;
 
     const boardName = document.querySelector('#name').value;
@@ -28,9 +28,18 @@ class RegisterBoard extends React.Component {
 
     dispatch(addBoardRequest(boardName, res => {
       dispatch(addBoard(res));
+      // todo: only push on success
       router.push(`/boards/${res.slug}`);
     }));
   }
+
+  _handleButtonClick = this._submitForm;
+  _handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      this._submitForm();
+    }
+  }
+
 
   render() {
     const { error } = this.state;
@@ -39,11 +48,17 @@ class RegisterBoard extends React.Component {
       <Wrapper>
         <Title>Let's make a board!</Title>
 
-        <Input required id="name" placeholder="Board Name" />
+        <Input
+          required
+          id="name"
+          placeholder="Board Name"
+          autoComplete="off"
+          onKeyPress={this._handleKeyPress}
+        />
 
         {error && <Error>{error}</Error>}
 
-        <Button onClick={this.handleButtonClick}>I'm so ready</Button>
+        <Button onClick={this._handleButtonClick}>I'm so ready</Button>
       </Wrapper>
     );
   }

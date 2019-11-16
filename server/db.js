@@ -25,15 +25,15 @@ export const store = {
 
 export const addBoard = board => {
   const boardId = nextBoardId++;
-  const slug = slug(board.title.toLowerCase()) + '-' + boardId;
+  const boardSlug = slug(board.title.toLowerCase()) + '-' + boardId;
   const newBoard = {
     id: boardId,
-    slug,
+    slug: boardSlug,
     task: {},
     users: [],
     ...board,
   };
-  store.boards[slug] = newBoard;
+  store.boards[boardSlug] = newBoard;
   return newBoard;
 }
 
