@@ -54,7 +54,9 @@ const Board = ({ params }) => {
   }, [user, websocket, websocket.isReady, params ]);
 
   useEffect(() => {
-    websocket.send('set_show_votes', { showVotes });
+    if (websocket.isReady) {
+      websocket.send('set_show_votes', { showVotes });
+    }
   }, [showVotes, websocket]);
 
   const resetBoard = () => websocket.send('reset_board');
