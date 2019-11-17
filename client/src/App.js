@@ -7,7 +7,9 @@ import { WebsocketProvider } from './contexts/WebsocketContext';
 import Routes from './Routes';
 import './main.css';
 
-const requireUsername = (nextState, replace) => isRegistered => {
+const requireUsername = (nextState, replace) => {
+  // TODO: it would be nice to pull this from UserContext, or make that more DRY
+  const isRegistered = !!window.sessionStorage.getItem('username');
   if (!isRegistered) {
     replace({
       pathname: '/who-dis',
@@ -21,11 +23,7 @@ export default function App(props) {
     <Provider store={props.store}>
       <UserProvider>
         <WebsocketProvider>
-          <Routes
-            history={browserHistory}
-            onChange={(prev, next, replace) => requireUsername(next, replace)}
-            onEnter={requireUsername}
-          />
+          <Routes history={browserHistory} checkUser={requireUsername} />
         </WebsocketProvider>
       </UserProvider>
     </Provider>
