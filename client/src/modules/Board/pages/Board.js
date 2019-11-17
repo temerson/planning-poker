@@ -33,7 +33,7 @@ const Board = ({ params }) => {
   const websocket = useWebsocket();
   const user = useUser();
   const [ board, setBoard ] = useState();
-  const [ showVotes, setShowVotes ] = useState(board && board.showVotes);
+  const [ showVotes, setShowVotes ] = useState(board ? board.showVotes : false);
 
   useEffect(() => {
     if (websocket.isReady) {
@@ -55,6 +55,8 @@ const Board = ({ params }) => {
 
   const resetBoard = () => websocket.send('reset_board');
 
+  const toggleShowVotes = () => setShowVotes(!showVotes);
+
   const setVote = (vote) => {
     websocket.send('set_vote', {
       username: user.getUsername(),
@@ -71,8 +73,8 @@ const Board = ({ params }) => {
       <BoardActions
         style={{ gridArea: 'actions' }}
         isOwner={isOwner}
-        onReveal={setShowVotes}
         onReset={resetBoard}
+        toggleShowVotes={toggleShowVotes}
         showVotes={showVotes}
       />
       <BoardMembers

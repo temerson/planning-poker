@@ -10,9 +10,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const BoardActions = ({ isOwner, onReset, onReveal, showVotes }) => (
+const BoardActions = ({ isOwner, onReset, toggleShowVotes, showVotes }) => (
   <Wrapper>
-    {isOwner && <Button onClick={onReveal}>{showVotes ? 'Hide' : 'Reveal'} Votes</Button>}
+    {isOwner && <Button onClick={toggleShowVotes}>{showVotes ? 'Hide' : 'Reveal'} Votes</Button>}
     {isOwner && <Button onClick={onReset}>Reset</Button>}
   </Wrapper>
 );
@@ -20,7 +20,7 @@ const BoardActions = ({ isOwner, onReset, onReveal, showVotes }) => (
 BoardActions.propTypes = {
   isOwner: PropTypes.bool.isRequired,
   onReset: PropTypes.func.isRequired,
-  onReveal: PropTypes.func.isRequired,
+  toggleShowVotes: PropTypes.func.isRequired,
   showVotes: PropTypes.bool.isRequired,
 };
 
