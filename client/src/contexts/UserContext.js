@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
   const [username, setUsername] = useState(window.sessionStorage.getItem('username'));
   useEffect(() => {
     window.sessionStorage.setItem('username', username);
-    return () => window.sessionStorage.setItem('username', null);
+    return () => window.sessionStorage.removeItem('username');
   }, [username]);
 
   return (

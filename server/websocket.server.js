@@ -1,8 +1,18 @@
 import webSocket from 'ws';
-import { handleMessage } from './controllers/websocket.controller';
+import { handleMessage, onUserLeave } from './controllers/websocket.controller';
+import { removeUserFromBoard } from './db';
 
-const configurePing = ws => {
+const configurePing = (ws, wss) => {
   ws.isAlive = true;
+
+  ws.on('close', () => {
+    console.log('closing: ' + ws.username + ' ' + ws.activeBoard);
+    const { activeBoard, username } = ws;
+    if (activeBoard && username) {
+      onUserLeave(ws, wss, { boardSlug: ws.activeBoard, username });
+    }
+  })
+
   ws.on('pong', () => ws.isAlive = true);
 }
 
@@ -21,7 +31,7 @@ const initWebsocketServer = (server) => {
   const wss = new webSocket.Server({ server });
 
   wss.on('connection', ws => {
-    configurePing(ws);
+    configurePing(ws, wss);
     subscribeToMessages(ws, wss);
   });
 

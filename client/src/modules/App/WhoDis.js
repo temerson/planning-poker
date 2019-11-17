@@ -8,8 +8,10 @@ const WhoDis = ({ router }) => {
   const [username, setUsername] = useState(user.getUsername() || '');
 
   const register = () => {
-    user.setUsername(username);
-    router.push('/boards');
+    if (username && username.length) {
+      user.setUsername(username);
+      router.push('/boards');
+    }
   }
 
   const handleKeyPress = event => {
