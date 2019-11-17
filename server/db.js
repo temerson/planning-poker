@@ -17,16 +17,16 @@ export const store = {
   }},
 };
 
-export const addBoard = (board, username) => {
+export const addBoard = (board) => {
   const boardId = nextBoardId++;
   const boardSlug = slug(board.title.toLowerCase()) + '-' + boardId;
   const newBoard = {
     id: boardId,
     slug: boardSlug,
-    owner: username,
+    title: board.title,
+    owner: board.username,
     task: {},
     users: [],
-    ...board,
   };
   store.boards[boardSlug] = newBoard;
   return newBoard;

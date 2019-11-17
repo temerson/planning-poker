@@ -68,6 +68,7 @@ const Board = ({ params }) => {
   if (!board) return null;
 
   const isOwner = user.getUsername() === board.owner;
+  console.log(user.getUsername(), board, board.owner);
   return (
     <Wrapper>
       <BoardActions
