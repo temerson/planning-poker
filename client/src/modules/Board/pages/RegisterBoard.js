@@ -1,67 +1,54 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Error, Input, Title, Wrapper } from '../../../components';
+import useUser from '../../../contexts/useUser';
 import { addBoard, addBoardRequest } from '../actions';
 
-class RegisterBoard extends React.Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
-  }
+const RegisterBoard = ({ router }) => {
+  const user = useUser();
+  const [error, setError] = useState(null);
+  const [boardName, setBoardName] = useState('');
+  const dispatch = useDispatch();
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  _submitForm = () => {
-    const { dispatch, router } = this.props;
-
-    const boardName = document.querySelector('#name').value;
-
+  const createBoard = () => {
     if (!boardName) {
-      this.setState({ error: 'A board name is required' });
+      setError({ error: 'A board name is required' });
       return;
     }
 
-    dispatch(addBoardRequest(boardName, res => {
+    dispatch(addBoardRequest(boardName, user.getUsername(), res => {
       dispatch(addBoard(res));
       // todo: only push on success
       router.push(`/boards/${res.slug}`);
     }));
   }
 
-  _handleButtonClick = this._submitForm;
-  _handleKeyPress = event => {
+  const handleKeyPress = event => {
     if (event.key === 'Enter') {
-      this._submitForm();
+      createBoard();
     }
   }
 
+  return (
+    <Wrapper>
+      <Title>Let's make a board!</Title>
 
-  render() {
-    const { error } = this.state;
+      <Input
+        required
+        autoFocus
+        placeholder="Board Name"
+        value={boardName}
+        onChange={e => setBoardName(e.target.value)}
+        onKeyPress={handleKeyPress}
+        autoComplete="off"
+      />
 
-    return (
-      <Wrapper>
-        <Title>Let's make a board!</Title>
+      {error && <Error>{error}</Error>}
 
-        <Input
-          required
-          id="name"
-          placeholder="Board Name"
-          autoComplete="off"
-          onKeyPress={this._handleKeyPress}
-        />
-
-        {error && <Error>{error}</Error>}
-
-        <Button onClick={this._handleButtonClick}>I'm so ready</Button>
-      </Wrapper>
-    );
-  }
+      <Button onClick={createBoard}>I'm so ready</Button>
+    </Wrapper>
+  );
 }
 
-export default connect()(withRouter(RegisterBoard));
+export default withRouter(RegisterBoard);

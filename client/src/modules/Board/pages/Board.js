@@ -53,7 +53,7 @@ const Board = ({ params }) => {
     };
   }, [user, websocket, websocket.isReady, params ]);
 
-  const resetBoard = () => {};
+  const resetBoard = () => websocket.send('reset_board');
 
   const setVote = (vote) => {
     websocket.send('set_vote', {
@@ -66,6 +66,7 @@ const Board = ({ params }) => {
   if (!board) return null;
 
   const isOwner = user.getUsername() === board.owner;
+  console.log(isOwner);
   return (
     <Wrapper>
       <BoardActions

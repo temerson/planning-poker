@@ -35,9 +35,10 @@ export function setActiveTask(task) {
 
 // Async actions -----------------------------------------------
 
-export function addBoardRequest(title, callback) {
+export function addBoardRequest(title, username, callback) {
   return () => {
-    return callApi('boards/', 'post', { title }).then(callback);
+    const payload = { title, username };
+    return callApi('boards/', 'post', payload).then(callback);
   };
 }
 
