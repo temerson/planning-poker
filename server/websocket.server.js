@@ -6,10 +6,9 @@ const configurePing = (ws, wss) => {
   ws.isAlive = true;
 
   ws.on('close', () => {
-    console.log('closing: ' + ws.username + ' ' + ws.activeBoard);
     const { activeBoard, username } = ws;
     if (activeBoard && username) {
-      onUserLeave(ws, wss, { boardSlug: ws.activeBoard, username });
+      onUserLeave(ws, wss, { boardSlug: activeBoard, username });
     }
   })
 

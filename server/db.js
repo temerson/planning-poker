@@ -39,9 +39,21 @@ export const addUserToBoard = (boardSlug, username) => {
   board.users = [ ...board.users, { username }];
 }
 
+const setDeleteBoardTimer = (boardSlug, timeout) => setTimeout(() => {
+  const board = store.boards[boardSlug];
+  if (board && board.users.length === 0) {
+    delete store.boards[boardSlug];
+  }
+}, timeout);
+
 export const removeUserFromBoard = (boardSlug, username) => {
   const board = store.boards[boardSlug];
-  board.users = board.users.filter(user => user.username !== username);
+  const newUsers = board.users.filter(user => user.username !== username);
+  board.users = newUsers;
+  if (newUsers.length === 0) {
+    // wait 10 seconds after the last user leaves before deleting the board
+    setDeleteBoardTimer(boardSlug, 10000);
+  }
 }
 
 export const setUserVote = (boardSlug, username, vote) => {
