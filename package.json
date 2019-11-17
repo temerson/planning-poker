@@ -8,6 +8,7 @@
     "client": "cd client && yarn start",
     "server": "nodemon -r esm server/server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "author": "",
   "license": "ISC",
