@@ -1,6 +1,7 @@
 import {
   addUserToBoard,
   removeUserFromBoard,
+  resetBoard,
   setUserVote,
   store,
 } from '../db';
@@ -36,6 +37,9 @@ const onUserVote = (ws, wss, message) => {
   publishBoardChanges(wss, message.boardSlug);
 }
 
+const onResetBoard = ws => resetBoard(ws.activeBoard);
+
+// TODO: stop passing around wss everywhere
 export const handleMessage = (ws, wss) => messageStr => {
     const message = JSON.parse(messageStr);
     switch (message.type) {
@@ -47,6 +51,9 @@ export const handleMessage = (ws, wss) => messageStr => {
         break;
       case 'set_vote':
         onUserVote(ws, wss, message);
+        break;
+      case 'reset_board':
+        onResetBoard(ws);
         break;
       default:
         console.log(`Unknown message type ${message.type}`);

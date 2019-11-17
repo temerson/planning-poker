@@ -6,6 +6,7 @@ let nextBoardId = 2;
 // hammering out the schema than a Mongo DB would be.
 export const store = {
   boards: {'my-board-1': {
+    owner: 'owner',
     slug: 'my-board-1',
     title: 'My Board',
     task: {
@@ -16,12 +17,13 @@ export const store = {
   }},
 };
 
-export const addBoard = board => {
+export const addBoard = (board, username) => {
   const boardId = nextBoardId++;
   const boardSlug = slug(board.title.toLowerCase()) + '-' + boardId;
   const newBoard = {
     id: boardId,
     slug: boardSlug,
+    owner: username,
     task: {},
     users: [],
     ...board,
