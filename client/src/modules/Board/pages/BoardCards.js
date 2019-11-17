@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import useWebsocket from '../../../contexts/useWebsocket';
 import PokerCard from './PokerCard';
 import styled from 'styled-components';
 
@@ -20,16 +21,14 @@ const Wrapper = styled.div`
   @media only screen and (max-width: 400px) {
     margin: 0 9rem;
   }
-
 `;
 
-const BoardCards = ({ onCardClick }) => {
-  const [vote, setVote] = useState(null);
+const BoardCards = ({ vote }) => {
+  const websocket = useWebsocket();
 
   const handleCardClick = (value) => {
     const newVote = value === vote ? null : value;
-    setVote(newVote);
-    onCardClick(newVote);
+    websocket.send('set_vote', { vote: newVote });
   }
 
   return (
@@ -50,7 +49,7 @@ const BoardCards = ({ onCardClick }) => {
 }
 
 BoardCards.propTypes = {
-  onCardClick: PropTypes.func.isRequired,
+  vote: PropTypes.string,
 }
 
 export default BoardCards;

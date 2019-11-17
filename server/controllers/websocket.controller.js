@@ -35,7 +35,7 @@ export const onUserLeave = (ws, wss, message) => {
 };
 
 const onUserVote = (ws, wss, message) => {
-  setUserVote(message.boardSlug, message.username, message.vote);
+  setUserVote(ws.activeBoard, ws.username, message.vote);
   publishBoardChanges(wss, ws.activeBoard);
 };
 

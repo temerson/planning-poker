@@ -61,17 +61,11 @@ const Board = ({ params }) => {
 
   const toggleShowVotes = () => setShowVotes(!showVotes);
 
-  const setVote = (vote) => {
-    websocket.send('set_vote', {
-      username: user.getUsername(),
-      boardSlug: params.boardSlug,
-      vote,
-    });
-  };
-
   if (!board.owner) return null;
 
+  const vote = board.users.find(boardUser => boardUser.username === user.getUsername()).vote;
   const isOwner = user.getUsername() === board.owner;
+
   return (
     <Wrapper>
       <BoardActions
@@ -94,7 +88,7 @@ const Board = ({ params }) => {
       />
       <BoardCards
         style={{ gridArea: 'cards' }}
-        onCardClick={setVote}
+        vote={vote}
       />
     </Wrapper>
   );
