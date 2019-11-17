@@ -52,3 +52,8 @@ export const resetBoard = boardSlug => {
   board.task = {};
   board.users = board.users.map(user => ({ username: user.username }));
 }
+
+export const updateTask = (boardSlug, task) => {
+  const board = store.boards[boardSlug];
+  board.task = task;
+}

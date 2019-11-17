@@ -4,6 +4,7 @@ import {
   resetBoard,
   setUserVote,
   store,
+  updateTask,
 } from '../db';
 
 const publishBoardChanges = (wss, boardSlug) => {
@@ -27,17 +28,28 @@ const onUserJoin = (ws, wss, message) => {
 };
 
 export const onUserLeave = (ws, wss, message) => {
-  ws.activeBoard = undefined;
   removeUserFromBoard(message.boardSlug, message.username);
-  publishBoardChanges(wss, message.boardSlug);
+  publishBoardChanges(wss, ws.activeBoard);
+  ws.activeBoard = undefined;
 };
 
 const onUserVote = (ws, wss, message) => {
   setUserVote(message.boardSlug, message.username, message.vote);
-  publishBoardChanges(wss, message.boardSlug);
-}
+  publishBoardChanges(wss, ws.activeBoard);
+};
 
-const onResetBoard = ws => resetBoard(ws.activeBoard);
+const onResetBoard = (ws, wss) => {
+  resetBoard(ws.activeBoard);
+  publishBoardChanges(wss, ws.activeBoard);
+};
+
+const onUpdateTask = (ws, wss, message) => {
+  updateTask(ws.activeBoard, {
+    title: message.title,
+    description: message.description,
+  });
+  publishBoardChanges(wss, ws.activeBoard);
+}
 
 // TODO: stop passing around wss everywhere
 export const handleMessage = (ws, wss) => messageStr => {
@@ -53,7 +65,10 @@ export const handleMessage = (ws, wss) => messageStr => {
         onUserVote(ws, wss, message);
         break;
       case 'reset_board':
-        onResetBoard(ws);
+        onResetBoard(ws, wss);
+        break;
+      case 'update_task':
+        onUpdateTask(ws, wss, message);
         break;
       default:
         console.log(`Unknown message type ${message.type}`);

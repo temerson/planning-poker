@@ -12,8 +12,12 @@ const Wrapper = styled.div`
 
 const BoardActions = ({ isOwner, onReset, toggleShowVotes, showVotes }) => (
   <Wrapper>
-    {isOwner && <Button onClick={toggleShowVotes}>{showVotes ? 'Hide' : 'Reveal'} Votes</Button>}
-    {isOwner && <Button onClick={onReset}>Reset</Button>}
+    {isOwner && (
+      <>
+        <Button onClick={toggleShowVotes}>{showVotes ? 'Hide' : 'Reveal'} Votes</Button>
+        <Button onClick={onReset}>Reset</Button>
+      </>
+    )}
   </Wrapper>
 );
 

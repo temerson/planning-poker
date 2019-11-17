@@ -90,7 +90,6 @@ const Board = ({ params }) => {
       />
       <BoardCards
         style={{ gridArea: 'cards' }}
-        task={board.task}
         onCardClick={setVote}
       />
     </Wrapper>

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 import { Input, TextArea } from '../../../components';
-import { taskChanged } from '../actions';
+import useWebsocket from '../../../contexts/useWebsocket';
+import useDebounce from '../../../hooks/useDebounce';
 
 const Wrapper = styled.div`
   grid-area: task;
@@ -25,65 +24,59 @@ const Content = styled.div`
   white-space: pre-wrap;
 `;
 
-class BoardTasks extends React.Component {
-  static propTypes = {
-    isOwner: PropTypes.bool.isRequired,
-    task: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-  };
+const BoardTasks = ({ isOwner, task }) => {
+  const websocket = useWebsocket();
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      editing: false,
-      ...props.task,
-    };
-  }
+  const debouncedTitle = useDebounce(title, 200);
+  const debouncedDescription = useDebounce(description, 200);
 
-  handleChange = (e, field) => {
-    this.setState(
-      { [field]: e.target.value, editing: true },
-      this.handleSubmit,
-    );
-  }
+  useEffect(() => setTitle(task.title), [task]);    
+  useEffect(() => setDescription(task.description), [task]);
 
-  handleSubmit = debounce(() => {
-    const { task, dispatch } = this.props;
-    dispatch(taskChanged(task._id, this.state.title, this.state.description));
-  }, 200);
+  useEffect(() => {
+    if (isOwner) {
+      websocket.send('update_task', {
+        title: debouncedTitle,
+        description: debouncedDescription,
+      });
+    }
+  }, [isOwner, websocket, debouncedTitle, debouncedDescription])
 
-  render() {
-    const { isOwner } = this.props;
-    return (
-      <Wrapper>
-        {isOwner ? (
-          <React.Fragment>
-            <Input
-              type="text"
-              placeholder="Task Title"
-              value={this.state.title || ''}
-              onChange={e => this.handleChange(e, 'title')}
-              disabled={!isOwner}
-            />
-            <TextArea
-              placeholder="Description"
-              rows="5"
-              cols="50"
-              value={this.state.description || ''}
-              onChange={e => this.handleChange(e, 'description')}
-              disabled={!isOwner}
-            />
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <h2>Task: {this.state.title || ''}</h2>
-            <h4>Description:</h4>
-            <Content>{this.state.description || ''}</Content>
-          </React.Fragment>
-        )}
-      </Wrapper>
-    );
-  }
+  return (
+    <Wrapper>
+      {isOwner ? (
+        <>
+          <Input
+            placeholder="Task Title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            disabled={!isOwner}
+          />
+          <TextArea
+            placeholder="Description"
+            rows="5"
+            cols="50"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            disabled={!isOwner}
+          />
+        </>
+      ) : (
+        <>
+          <h2>Task: {title}</h2>
+          <h4>Description:</h4>
+          <Content>{description}</Content>
+        </>
+      )}
+    </Wrapper>
+  );
 }
 
-export default connect()(BoardTasks);
+BoardTasks.propTypes = {
+  isOwner: PropTypes.bool.isRequired,
+  task: PropTypes.object.isRequired,
+};
+
+export default BoardTasks;
