@@ -32,8 +32,8 @@ const BoardTasks = ({ isOwner, task }) => {
   const debouncedTitle = useDebounce(title, 200);
   const debouncedDescription = useDebounce(description, 200);
 
-  useEffect(() => setTitle(task.title), [task]);    
-  useEffect(() => setDescription(task.description), [task]);
+  useEffect(() => setTitle(task.title || ''), [task]);
+  useEffect(() => setDescription(task.description || ''), [task]);
 
   useEffect(() => {
     if (isOwner) {

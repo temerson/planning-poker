@@ -41,6 +41,7 @@ const onUserVote = (ws, wss, message) => {
 
 const onResetBoard = (ws, wss) => {
   resetBoard(ws.activeBoard);
+  setShowVotes(ws.activeBoard, false);
   publishBoardChanges(wss, ws.activeBoard);
 };
 
