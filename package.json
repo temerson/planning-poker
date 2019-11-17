@@ -2,24 +2,14 @@
   "name": "planning-poker",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "test": "test",
-    "client": "cd client && yarn start",
-    "server": "nodemon -r esm server/server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "install": "(cd client && yarn) && (cd server && yarn)",
+    "start": "concurrently \"cd client && yarn start\" \"cd server && yarn start\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "limax": "^2.0.0",
-    "ws": "^7.2.0"
-  },
-  "devDependencies": {
-    "concurrently": "^5.0.0",
-    "esm": "^3.2.25",
-    "nodemon": "^1.19.4"
+    "concurrently": "^5.0.0"
   }
 }
