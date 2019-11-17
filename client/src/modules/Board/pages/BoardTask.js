@@ -32,9 +32,6 @@ const BoardTasks = ({ isOwner, task }) => {
   const debouncedTitle = useDebounce(title, 200);
   const debouncedDescription = useDebounce(description, 200);
 
-  useEffect(() => setTitle(task.title), [task]);
-  useEffect(() => setDescription(task.description), [task]);
-
   useEffect(() => {
     if (isOwner) {
       websocket.send('update_task', {
@@ -65,9 +62,9 @@ const BoardTasks = ({ isOwner, task }) => {
         </>
       ) : (
         <>
-          <h2>Task: {title}</h2>
+          <h2>Task: {task.title}</h2>
           <h4>Description:</h4>
-          <Content>{description}</Content>
+          <Content>{task.description}</Content>
         </>
       )}
     </Wrapper>
