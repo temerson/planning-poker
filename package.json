@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install": "(cd client && yarn) && (cd server && yarn)",
-    "start": "concurrently \"cd client && yarn start\" \"cd server && yarn start\"",
-    "heroku-postbuild": "yarn build"
+    "start": "concurrently \"cd client && PORT=80 yarn start\" \"cd server && yarn start\""
   },
   "author": "",
   "license": "ISC",
