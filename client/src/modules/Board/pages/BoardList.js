@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Divider, LinkButton, Title, Wrapper } from '../../../components';
 import { getBoards } from '../reducers';
 
+// todo: need some periodic refresh here
 const BoardList = ({ boards }) => {
   const hasBoards = boards.length > 0;
   const title = hasBoards ? 'Pick a Board' : 'No public boards available';

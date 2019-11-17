@@ -32,8 +32,8 @@ const BoardTasks = ({ isOwner, task }) => {
   const debouncedTitle = useDebounce(title, 200);
   const debouncedDescription = useDebounce(description, 200);
 
-  useEffect(() => setTitle(task.title || ''), [task]);
-  useEffect(() => setDescription(task.description || ''), [task]);
+  useEffect(() => setTitle(task.title), [task]);
+  useEffect(() => setDescription(task.description), [task]);
 
   useEffect(() => {
     if (isOwner) {
@@ -50,7 +50,7 @@ const BoardTasks = ({ isOwner, task }) => {
         <>
           <Input
             placeholder="Task Title"
-            value={title}
+            value={title || ''}
             onChange={e => setTitle(e.target.value)}
             disabled={!isOwner}
           />
@@ -58,7 +58,7 @@ const BoardTasks = ({ isOwner, task }) => {
             placeholder="Description"
             rows="5"
             cols="50"
-            value={description}
+            value={description || ''}
             onChange={e => setDescription(e.target.value)}
             disabled={!isOwner}
           />

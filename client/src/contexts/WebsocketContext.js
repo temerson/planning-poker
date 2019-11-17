@@ -12,7 +12,7 @@ export class WebsocketProvider extends React.Component {
     isReady: false,
   }
 
-  websocket = new WebSocket('ws://localhost:5000');
+  websocket = new WebSocket(`ws://${window.location.hostname}:5000`);
 
   _send = (type, body) => {
     const payload = { type, ...body };
