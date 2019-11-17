@@ -6,7 +6,7 @@
   "scripts": {
     "install": "(cd client && yarn) && (cd server && yarn)",
     "start": "concurrently \"cd client && yarn start\" \"cd server && yarn start\"",
-    "postinstall": "cd client && yarn build"
+    "heroku-postbuild": "cd client && yarn build"
   },
   "author": "",
   "license": "ISC",
