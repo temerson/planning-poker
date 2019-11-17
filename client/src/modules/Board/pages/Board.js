@@ -33,7 +33,7 @@ const Board = ({ params }) => {
   const websocket = useWebsocket();
   const user = useUser();
   const [ board, setBoard ] = useState();
-  const [ showNotes, setShowVotes ] = useState(board && board.showVotes);
+  const [ showVotes, setShowVotes ] = useState(board && board.showVotes);
 
   useEffect(() => {
     if (websocket.isReady) {
@@ -73,13 +73,13 @@ const Board = ({ params }) => {
         isOwner={isOwner}
         onReveal={setShowVotes}
         onReset={resetBoard}
-        showVotes={showNotes}
+        showVotes={showVotes}
       />
       <BoardMembers
         style={{ gridArea: 'members' }}
         task={board.task}
         members={board.users}
-        showVotes={showNotes}
+        showVotes={showVotes}
       />
       <BoardTask
         style={{ gridArea: 'task' }}
