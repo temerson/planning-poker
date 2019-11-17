@@ -4,6 +4,7 @@ import {
   resetBoard,
   setUserVote,
   store,
+  setShowVotes,
   updateTask,
 } from '../db';
 
@@ -51,6 +52,11 @@ const onUpdateTask = (ws, wss, message) => {
   publishBoardChanges(wss, ws.activeBoard);
 }
 
+const onSetShowVotes = (ws, wss, message) => {
+  setShowVotes(ws.activeBoard, message.showVotes);
+  publishBoardChanges(wss, ws.activeBoard);
+}
+
 // TODO: stop passing around wss everywhere
 export const handleMessage = (ws, wss) => messageStr => {
     const message = JSON.parse(messageStr);
@@ -69,6 +75,9 @@ export const handleMessage = (ws, wss) => messageStr => {
         break;
       case 'update_task':
         onUpdateTask(ws, wss, message);
+        break;
+      case 'set_show_votes':
+        onSetShowVotes(ws, wss, message);
         break;
       default:
         console.log(`Unknown message type ${message.type}`);

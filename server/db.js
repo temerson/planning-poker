@@ -9,6 +9,7 @@ export const store = {
     owner: 'owner',
     slug: 'my-board-1',
     title: 'My Board',
+    showVotes: false,
     task: {
       title: 'Working on some stuff',
       description: 'Do things and other stuff really good like',
@@ -25,6 +26,7 @@ export const addBoard = (board) => {
     slug: boardSlug,
     title: board.title,
     owner: board.username,
+    showVotes: false,
     task: {},
     users: [],
   };
@@ -56,4 +58,9 @@ export const resetBoard = boardSlug => {
 export const updateTask = (boardSlug, task) => {
   const board = store.boards[boardSlug];
   board.task = task;
+}
+
+export const setShowVotes = (boardSlug, showVotes) => {
+  const board = store.boards[boardSlug];
+  board.showVotes = showVotes;
 }

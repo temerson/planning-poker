@@ -32,8 +32,8 @@ const Wrapper = styled.div`
 const Board = ({ params }) => {
   const websocket = useWebsocket();
   const user = useUser();
-  const [ board, setBoard ] = useState();
-  const [ showVotes, setShowVotes ] = useState(board ? board.showVotes : false);
+  const [ board, setBoard ] = useState({});
+  const [ showVotes, setShowVotes ] = useState(board.showVotes || false);
 
   useEffect(() => {
     if (websocket.isReady) {
@@ -53,6 +53,10 @@ const Board = ({ params }) => {
     };
   }, [user, websocket, websocket.isReady, params ]);
 
+  useEffect(() => {
+    websocket.send('set_show_votes', { showVotes });
+  }, [showVotes, websocket]);
+
   const resetBoard = () => websocket.send('reset_board');
 
   const toggleShowVotes = () => setShowVotes(!showVotes);
@@ -65,10 +69,9 @@ const Board = ({ params }) => {
     });
   };
 
-  if (!board) return null;
+  if (!board.owner) return null;
 
   const isOwner = user.getUsername() === board.owner;
-  console.log(user.getUsername(), board, board.owner);
   return (
     <Wrapper>
       <BoardActions
@@ -76,13 +79,13 @@ const Board = ({ params }) => {
         isOwner={isOwner}
         onReset={resetBoard}
         toggleShowVotes={toggleShowVotes}
-        showVotes={showVotes}
+        showVotes={board.showVotes}
       />
       <BoardMembers
         style={{ gridArea: 'members' }}
         task={board.task}
         members={board.users}
-        showVotes={showVotes}
+        showVotes={board.showVotes}
       />
       <BoardTask
         style={{ gridArea: 'task' }}
